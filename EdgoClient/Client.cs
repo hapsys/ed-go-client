@@ -21,7 +21,7 @@ namespace EdGo.EdgoClient
 {
 	class Client
 	{
-		private Regex reg = new Regex("^.*\"data\"\\:\\s*(\\{[^\\}]+\\}).*", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex reg = new Regex("^.*\"data\"\\:\\s*(\\{[^\\}]*\\}).*", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public static Client instance { get; } = new Client();
 
 		private byte[] pgpKey = null;
@@ -240,8 +240,18 @@ namespace EdGo.EdgoClient
 				{
 
 					String str = reg.Replace(stringContent, "$1");
+					//Console.WriteLine(str);
 					logger.log(str);
-					result = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
+					if ("{}".Equals(str))
+					{
+						result = new Dictionary<string, string>();
+
+					}
+					else
+					{
+						result = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
+					}
+
 				}
 			}
 			catch (Exception e)

@@ -79,9 +79,16 @@ namespace EdGo
 			int result = -1;
 			if (!pilotNames.ContainsKey(name.ToLower()))
 			{
-				newPilotDialog(name);
+				if (pilotNames.Count == 0)
+				{
+					pilotNames[name.ToLower()] = false;
+				}
+				else
+				{ 
+					newPilotDialog(name);
+				}
 			}
-			result = pilotNames[name.ToLower()] ? 0 : 1;
+			result = pilotNames[name.ToLower()] ? 1 : 0;
 			return result;
 		}
 		public void process()
@@ -104,8 +111,14 @@ namespace EdGo
 					}
 					else
 					{
-						setPilotNames(startInfo["used_names"]);
-						fileProc.setReset(startInfo["timestamp"], startInfo["event_name"], startInfo["event_hash"]);
+						if (startInfo.ContainsKey("timestamp"))
+						{
+							setPilotNames(startInfo["used_names"]);
+							fileProc.setReset(startInfo["timestamp"], startInfo["event_name"], startInfo["event_hash"]);
+						} else
+						{
+							fileProc.setReset();
+						}
 						resetProcessor = new Thread(new ThreadStart(fileProc.resetTo));
 						resetProcessor.Start();
 					}
@@ -147,6 +160,7 @@ namespace EdGo
 				started = false;
 				mWin.setStartStopState(false);
 			}
+			process();
 		}
 
 		// processes

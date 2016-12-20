@@ -25,7 +25,7 @@ namespace EdGo.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/c3s-edgo/ajax/client/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://ed-go.ru/ajax/client/")]
         public string EdgoURL {
             get {
                 return ((string)(this["EdgoURL"]));

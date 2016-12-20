@@ -104,5 +104,10 @@ namespace EdGo
 			return result;
 		}
 
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			//System.Windows.Application.Current.Exit();
+			System.Environment.Exit(1);
+		}
 	}
 }

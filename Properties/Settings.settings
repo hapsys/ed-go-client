@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="EdgoURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:8080/c3s-edgo/ajax/client/</Value>
+      <Value Profile="(Default)">http://ed-go.ru/ajax/client/</Value>
     </Setting>
     <Setting Name="UserID" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
