@@ -153,14 +153,21 @@ namespace EdGo.EdgoClient
 
 		protected String request(List<KeyValuePair<string, string>> parameters)
 		{
-			var content = new FormUrlEncodedContent(parameters);
+			//var content = new FormUrlEncodedContent(parameters);
+			var content = "";
+			foreach (KeyValuePair< string, string> pair in parameters)
+			{
+				string name = WebUtility.UrlEncode(pair.Key);
+				string value = WebUtility.UrlEncode(pair.Value);
+				content += name + "=" + value + "&";
+			}
 			String result = null;
 
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("Accept", "application/json");
 			request.Headers.Add("X-Requested-With", "XMLHttpRequest");
 			request.Method = HttpMethod.Post;
-			request.Content = content;
+			request.Content = new StringContent(content);
 			request.RequestUri = new Uri(url);
 
 			var response = http.SendAsync(request);

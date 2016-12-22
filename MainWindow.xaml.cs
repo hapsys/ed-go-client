@@ -109,5 +109,10 @@ namespace EdGo
 			//System.Windows.Application.Current.Exit();
 			System.Environment.Exit(1);
 		}
+
+		private void buttonCompanion_Click(object sender, RoutedEventArgs e)
+		{
+			AppDispatcher.instance.showCompanionWindow();
+		}
 	}
 }

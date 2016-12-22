@@ -11,6 +11,7 @@
         <Ellipse Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="25"/>
         <Button x:Name="buttonProcess" Content="Start" HorizontalAlignment="Left" Margin="40,54,0,0" VerticalAlignment="Top" Width="75" Click="buttonProcess_Click"/>
         <TextBox x:Name="textOut" HorizontalAlignment="Left" Height="227" Margin="10,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textOut_TextChanged"/>
+        <Button x:Name="buttonCompanion" Content="Companion API" HorizontalAlignment="Right" Margin="0,54,11,0" VerticalAlignment="Top" Width="114" Click="buttonCompanion_Click"/>
 
     </Grid>
 </Window>

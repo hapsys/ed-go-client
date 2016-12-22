@@ -85,6 +85,7 @@ namespace EdGo
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
+			//BrightIdeasSoftware.ObjectListView
 			client.retunDefault();
 			AppDispatcher.instance.hideClientSettings();
 		}

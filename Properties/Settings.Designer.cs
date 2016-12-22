@@ -118,5 +118,41 @@ namespace EdGo.Properties {
                 this["IsStarted"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CompanionAppId {
+            get {
+                return ((string)(this["CompanionAppId"]));
+            }
+            set {
+                this["CompanionAppId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CompanionMachineId {
+            get {
+                return ((string)(this["CompanionMachineId"]));
+            }
+            set {
+                this["CompanionMachineId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CompanionMachineToken {
+            get {
+                return ((string)(this["CompanionMachineToken"]));
+            }
+            set {
+                this["CompanionMachineToken"] = value;
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using EdGo.EdgoClient;
-
+using EddiCompanionAppService;
 namespace EdGo
 {
 	class AppDispatcher
@@ -21,7 +21,8 @@ namespace EdGo
 
 		private ClientWindow settingsClient = null;
 		public MainWindow mWin { get; set; } = null;
-		public ClientWindow cWin { get; set; } = null;
+		//public ClientWindow cWin { get; set; } = null;
+		public Companian cWin { get; set; } = null;
 
 		private Client client = Client.instance;
 		private bool started { get; set; } = false;
@@ -32,6 +33,8 @@ namespace EdGo
 
 
 		private IDictionary<String, bool> pilotNames = new Dictionary<String, bool>();
+
+		public CompanionAppService companionService { get; } = CompanionAppService.Instance;
 
 		public AppDispatcher()
 		{
@@ -210,6 +213,50 @@ namespace EdGo
 			if (readFileProcessor != null && readFileProcessor.IsAlive)
 			{
 				readFileProcessor.Interrupt();
+			}
+		}
+
+		/*
+		 * Companian 
+		 */
+		public void showCompanionWindow()
+		{
+			if (cWin == null)
+			{
+				cWin = new Companian();
+			}
+			cWin.setState(companionService.CurrentState);
+			cWin.ShowDialog();
+		}
+
+		public void companionNext()
+		{
+			switch (companionService.CurrentState)
+			{
+				case CompanionAppService.State.NEEDS_LOGIN:
+					companionService.Login();
+					cWin.setState(companionService.CurrentState);
+					break;
+				case CompanionAppService.State.NEEDS_CONFIRMATION:
+					companionService.Confirm();
+					cWin.setState(companionService.CurrentState);
+					break;
+				case CompanionAppService.State.READY:
+					companionService.Profile();
+					sendCompanianInfo();
+					cWin.setState(companionService.CurrentState);
+					break;
+				default:
+					break;
+			}
+		}
+
+		public void sendCompanianInfo()
+		{
+			if (companionService.CurrentState == CompanionAppService.State.READY && !string.IsNullOrEmpty(companionService.Content))
+			{
+				string data = "{ \"timestamp\":\"2037-01-01T00:00:00Z\", \"event\":\"CompanionApi\", \"CompanionData\": " + companionService.Content + " }";
+				client.sendEvent(data);
 			}
 		}
 	}
