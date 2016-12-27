@@ -21,7 +21,7 @@ namespace EdGo.EdgoClient
 {
 	class Client
 	{
-		private Regex reg = new Regex("^.*\"data\"\\:\\s*(\\{[^\\}]+\\}).*", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex reg = new Regex("^.*\"data\"\\:\\s*(\\{[^\\}]*\\}).*", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public static Client instance { get; } = new Client();
 
 		private byte[] pgpKey = null;
@@ -153,14 +153,21 @@ namespace EdGo.EdgoClient
 
 		protected String request(List<KeyValuePair<string, string>> parameters)
 		{
-			var content = new FormUrlEncodedContent(parameters);
+			//var content = new FormUrlEncodedContent(parameters);
+			var content = "";
+			foreach (KeyValuePair< string, string> pair in parameters)
+			{
+				string name = WebUtility.UrlEncode(pair.Key);
+				string value = WebUtility.UrlEncode(pair.Value);
+				content += name + "=" + value + "&";
+			}
 			String result = null;
 
 			HttpRequestMessage request = new HttpRequestMessage();
 			request.Headers.Add("Accept", "application/json");
 			request.Headers.Add("X-Requested-With", "XMLHttpRequest");
 			request.Method = HttpMethod.Post;
-			request.Content = content;
+			request.Content = new StringContent(content);
 			request.RequestUri = new Uri(url);
 
 			var response = http.SendAsync(request);
@@ -240,8 +247,18 @@ namespace EdGo.EdgoClient
 				{
 
 					String str = reg.Replace(stringContent, "$1");
+					//Console.WriteLine(str);
 					logger.log(str);
-					result = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
+					if ("{}".Equals(str))
+					{
+						result = new Dictionary<string, string>();
+
+					}
+					else
+					{
+						result = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
+					}
+
 				}
 			}
 			catch (Exception e)

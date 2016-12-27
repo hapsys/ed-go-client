@@ -5,12 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdGo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="ED-GO Event Client" Height="370" Width="525" Closed="Window_Closed">
     <Grid>
         <Button x:Name="edgoSettings" Content="ED-GO client settings " HorizontalAlignment="Left" Height="25" Margin="40,10,0,0" VerticalAlignment="Top" Width="467" Click="edgoSettings_Click"/>
         <Ellipse Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="25"/>
         <Button x:Name="buttonProcess" Content="Start" HorizontalAlignment="Left" Margin="40,54,0,0" VerticalAlignment="Top" Width="75" Click="buttonProcess_Click"/>
         <TextBox x:Name="textOut" HorizontalAlignment="Left" Height="227" Margin="10,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="497" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textOut_TextChanged"/>
-
+        <Button x:Name="buttonCompanion" Content="Companion API" HorizontalAlignment="Right" Margin="0,54,11,0" VerticalAlignment="Top" Width="114" Click="buttonCompanion_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top">                                
+            <Hyperlink NavigateUri="http://ed-go.ru" RequestNavigate="Hyperlink_RequestNavigate">Goto ED-GO Site</Hyperlink>
+        </TextBlock>
     </Grid>
 </Window>

@@ -45,6 +45,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,9 +56,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -64,8 +68,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandProcessor.cs" />
+    <Compile Include="CompanionAppService\CompanionAppAuthenticationException.cs" />
+    <Compile Include="CompanionAppService\CompanionAppCredentials.cs" />
+    <Compile Include="CompanionAppService\CompanionAppErrorException.cs" />
+    <Compile Include="CompanionAppService\CompanionAppException.cs" />
+    <Compile Include="CompanionAppService\CompanionAppService.cs" />
+    <Compile Include="CompanionAppService\CompanionIllegalStateException.cs" />
     <Compile Include="Dispatcher.cs" />
     <Compile Include="TextLogger.cs" />
+    <Compile Include="Companian.xaml.cs">
+      <DependentUpon>Companian.xaml</DependentUpon>
+    </Compile>
     <Page Include="ClientWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -88,6 +101,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Companian.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -117,6 +134,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

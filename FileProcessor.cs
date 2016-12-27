@@ -27,7 +27,8 @@ namespace EdGo
 		private Regex regCommander = new Regex("^.*\"Commander\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 		private static string homeDir = Environment.ExpandEnvironmentVariables("%USERPROFILE%") + "\\Saved Games\\Frontier Developments\\Elite Dangerous\\";
-        //private List<FileDescription> files = null;
+		//private static string homeDir = "F:\\freelance\\elite-dangerous\\journals\\oleg\\";
+		//private List<FileDescription> files = null;
 		private StreamReader reader = null;
         //private CommandProcessor processor = null;
         TextLogger logger = TextLogger.instance;
@@ -81,7 +82,8 @@ namespace EdGo
 				}
 				else
 				{
-					filelist = directoryList(false);
+					filelist = directoryList(true);
+					/*
 					int idx = 0;
 					int count = filelist.Count;
 					if (lastFile != null && lastFile.Length > 0)
@@ -101,6 +103,8 @@ namespace EdGo
 					{
 						idx = filelist.Count() - 1;
 					}
+					*/
+					int idx = filelist.Count() - 1;
 					logger.log("Start index: " + idx);
 					bool found = false;
 					for (int i = idx; i >= 0 && !found; i--)
@@ -217,7 +221,7 @@ namespace EdGo
 							{
 								if (isNewCommander != null)
 								{
-									line = "{" + "\"IsNew\"=" + isNewCommander + ", " + line.Substring(2);
+									line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
 								}
 								sb.Append(line);
 							}
@@ -327,7 +331,7 @@ namespace EdGo
 					{
 						if (isNewCommander != null)
 						{
-							line = "{" + "\"IsNew\"=" + isNewCommander + ", " + line.Substring(2);
+							line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
 						}
 						logger.log("Read event line from journal file.");
 						if (!processEvent(line))
@@ -408,7 +412,7 @@ namespace EdGo
 			// Use input string to calculate MD5 hash
 			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
 			{
-				byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+				byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
 				byte[] hashBytes = md5.ComputeHash(inputBytes);
 
 				// Convert the byte array to hexadecimal string

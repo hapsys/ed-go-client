@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using EdGo.EdgoClient;
 
 namespace EdGo
@@ -104,5 +105,22 @@ namespace EdGo
 			return result;
 		}
 
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			//System.Windows.Application.Current.Exit();
+			System.Environment.Exit(1);
+		}
+
+		private void buttonCompanion_Click(object sender, RoutedEventArgs e)
+		{
+			AppDispatcher.instance.showCompanionWindow();
+		}
+
+		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+			e.Handled = true;
+		}
 	}
+
 }
