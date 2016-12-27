@@ -49,14 +49,15 @@
         </Grid>
         <Grid Name="Row1Grid" Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="140" />
-                <ColumnDefinition Width="255*" />
+                <ColumnDefinition Width="140" />
                 <ColumnDefinition Width="140" MinWidth="140" />
             </Grid.ColumnDefinitions>
             <Button
                 x:Name="buttonProcess"
                 Grid.Row="0"
-                Grid.Column="0"
+                Grid.Column="1"
                 Height="25"
                 Margin="10,5,5,5"
                 HorizontalAlignment="Stretch"
