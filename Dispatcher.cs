@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using EdGo.EdgoClient;
 using EddiCompanionAppService;
 namespace EdGo
@@ -153,7 +154,9 @@ namespace EdGo
 			{
 				settingsClient = new ClientWindow();
 			}
-			settingsClient.ShowDialog();
+            settingsClient.ShowInTaskbar = false;
+		    settingsClient.ShowDialog();
+		    settingsClient = null;
 		}
 
 		public void hideClientSettings()
@@ -164,7 +167,7 @@ namespace EdGo
 				mWin.setStartStopState(false);
 			}
 			process();
-		}
+        }
 
 		// processes
 		public void endResetProcess()
