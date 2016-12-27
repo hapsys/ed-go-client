@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 using EdGo.EdgoClient;
 
 namespace EdGo
@@ -23,9 +25,7 @@ namespace EdGo
     public partial class MainWindow : Window
     {
 
-		private Client client = Client.instance;
-
-		private bool started = false;
+		private readonly Client _client = Client.instance;
 
 		public MainWindow()
         {
@@ -33,57 +33,36 @@ namespace EdGo
 			TextLogger.instance.output = textOut;
 			AppDispatcher.instance.mWin = this;
 			AppDispatcher.instance.process();
+		    AppDispatcher.instance.ProcessEndEvent += OnProcessEnd;
+            AppDispatcher.instance.ChangeStateProcessEvent += OnChangeStateProcess;
 
-		}
+        }
+
+        private void OnChangeStateProcess(bool state = true)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                buttonProcess.IsEnabled = state;
+            });
+        }
+
+        private void OnProcessEnd(bool started)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                buttonProcess.Content = started ? "Stop" : "Start";
+            });
+        }
 
         private void edgoSettings_Click(object sender, RoutedEventArgs e)
         {
 			AppDispatcher.instance.showClientSettings();
         }
 
-		private void start()
-		{
-			IDictionary<string, string> startInfo = client.getLastInfo();
-			if (startInfo != null) { 
-			foreach (string key in startInfo.Keys)
-				{
-					Console.WriteLine(key + "=>" + startInfo[key]);
-				}
-			}
-
-		}
-		private void startStop(bool state)
-		{
-			started = state;
-			if (started)
-			{
-				buttonProcess.Content = "Stop";
-				//start();
-			}
-			else
-			{
-				buttonProcess.Content = "Start";
-			}
-
-		}
-
 		private void buttonProcess_Click(object sender, RoutedEventArgs e)
 		{
-			//startStop(!started);
-			AppDispatcher.instance.pressStart();
-		}
-
-		public void showStopButton()
-		{
-			buttonProcess.Content = "Stop";
-		}
-		public void showStartButton()
-		{
-			buttonProcess.Content = "Start";
-		}
-		public void setStartStopState(bool state = true) 
-		{
-			buttonProcess.IsEnabled = state;
+            var thread = new Thread(AppDispatcher.instance.pressStart);
+            thread.Start();
 		}
 
 		private void textOut_TextChanged(object sender, TextChangedEventArgs e)
@@ -107,13 +86,13 @@ namespace EdGo
 
 		private void Window_Closed(object sender, EventArgs e)
 		{
-			//System.Windows.Application.Current.Exit();
-			System.Environment.Exit(1);
+			Environment.Exit(1);
 		}
 
 		private void buttonCompanion_Click(object sender, RoutedEventArgs e)
 		{
-			AppDispatcher.instance.showCompanionWindow();
+           var companianWindow = new Companian();
+           companianWindow.ShowDialog();
 		}
 
 		private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

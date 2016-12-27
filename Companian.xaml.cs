@@ -21,12 +21,53 @@ namespace EdGo
 	/// </summary>
 	public partial class Companian : Window
 	{
-		public Companian()
+		public Companian(CompanionAppService.State state)
 		{
-			InitializeComponent();
-		}
+            InitializeComponent();
+		    setState(state);
+            EventInit();
+        }
 
-		private void input_KeyUp(object sender, KeyEventArgs e)
+        public Companian()
+        {
+            InitializeComponent();
+            EventInit();
+        }
+
+	    private void EventInit()
+	    {
+	        AppDispatcher.instance.ChangeStateCompanion += OnChangeState;
+	    }
+
+	    private void OnChangeState(CompanionAppService.State state)
+	    {
+            switch (state)
+            {
+                case CompanionAppService.State.NEEDS_LOGIN:
+                    inputEmail.IsEnabled = true;
+                    inputPassword.IsEnabled = true;
+                    inputCode.IsEnabled = false;
+                    buttonNext.IsEnabled = true;
+                    buttonSend.IsEnabled = false;
+                    break;
+                case CompanionAppService.State.NEEDS_CONFIRMATION:
+                    inputEmail.IsEnabled = false;
+                    inputPassword.IsEnabled = false;
+                    inputCode.IsEnabled = true;
+                    buttonNext.IsEnabled = true;
+                    buttonSend.IsEnabled = false;
+                    break;
+                case CompanionAppService.State.READY:
+                    inputEmail.IsEnabled = false;
+                    inputPassword.IsEnabled = false;
+                    inputCode.IsEnabled = false;
+                    buttonNext.IsEnabled = false;
+                    buttonSend.IsEnabled = true;
+                    break;
+            }
+        }
+
+	    private void input_KeyUp(object sender, KeyEventArgs e)
 		{
 			CompanionAppCredentials.Instance().email = inputEmail.Text;
 			CompanionAppCredentials.Instance().password = inputPassword.Text;

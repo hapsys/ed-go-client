@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using EdGo.EdgoClient;
 using EddiCompanionAppService;
@@ -26,7 +28,7 @@ namespace EdGo
 		public Companian cWin { get; set; } = null;
 
 		private Client client = Client.instance;
-		private bool started { get; set; } = false;
+        private bool started { get; set; } = false;
 
 		private FileProcessor fileProc = new FileProcessor();
 
@@ -37,7 +39,12 @@ namespace EdGo
 
 		public CompanionAppService companionService { get; } = CompanionAppService.Instance;
 
-		public AppDispatcher()
+	    public event Action<bool> ProcessEndEvent;
+        public event Action<bool> ChangeStateProcessEvent;
+
+	    public event Action<CompanionAppService.State> ChangeStateCompanion;
+
+        public AppDispatcher()
 		{
 			fileProc.load();
 		}
@@ -103,14 +110,13 @@ namespace EdGo
 				if (started)
 				{
 					logger.log("Process......");
-					mWin.setStartStopState(false);
+                    ChangeStateProcessEvent?.Invoke(false);
 					//Thread.Sleep(500);
 					logger.log("Load last Info");
 					IDictionary<string, string> startInfo = client.getLastInfo();
 					if (startInfo == null)
 					{
 						logger.log("Error cnnectiong to Server!!!!");
-						mWin.showStartButton();
 						started = false;
 					}
 					else
@@ -127,26 +133,26 @@ namespace EdGo
 						resetProcessor.Start();
 					}
 				}
-				mWin.setStartStopState(true);
-			} else
+                ChangeStateProcessEvent?.Invoke(true);
+            } else
 			{
-				mWin.setStartStopState(false);
-			}
+                ChangeStateProcessEvent?.Invoke(false);
+            }
 		}
 
 		public void pressStart()
 		{
-			started = !started;
-			if (started)
-			{
-				mWin.showStopButton();
-				process();
-			}
-			else
-			{
-				killAllTasks();
-				mWin.showStartButton();
-			}
+            started = !started;
+            if (started)
+            {
+                process();
+                ProcessEndEvent?.Invoke(started);
+            }
+            else
+            {
+                killAllTasks();
+                ProcessEndEvent?.Invoke(started);
+            }
 		}
 		public void showClientSettings()
 		{
@@ -154,7 +160,6 @@ namespace EdGo
 			{
 				settingsClient = new ClientWindow();
 			}
-            settingsClient.ShowInTaskbar = false;
 		    settingsClient.ShowDialog();
 		    settingsClient = null;
 		}
@@ -164,7 +169,8 @@ namespace EdGo
 			if (client.isTested)
 			{
 				started = false;
-				mWin.setStartStopState(false);
+                ChangeStateProcessEvent?.Invoke(false);
+                //mWin.setStartStopState(false);
 			}
 			process();
         }
@@ -219,36 +225,25 @@ namespace EdGo
 			}
 		}
 
-		/*
-		 * Companian 
-		 */
-		public void showCompanionWindow()
-		{
-			if (cWin == null)
-			{
-				cWin = new Companian();
-			}
-			cWin.setState(companionService.CurrentState);
-			cWin.ShowDialog();
-		    cWin = null;
-		}
-
 		public void companionNext()
 		{
 			switch (companionService.CurrentState)
 			{
 				case CompanionAppService.State.NEEDS_LOGIN:
 					companionService.Login();
-					cWin.setState(companionService.CurrentState);
+                    ChangeStateCompanion?.Invoke(companionService.CurrentState);
+                    //cWin.setState(companionService.CurrentState);
 					break;
 				case CompanionAppService.State.NEEDS_CONFIRMATION:
 					companionService.Confirm();
-					cWin.setState(companionService.CurrentState);
-					break;
+                    ChangeStateCompanion?.Invoke(companionService.CurrentState);
+                    //cWin.setState(companionService.CurrentState);
+                    break;
 				case CompanionAppService.State.READY:
 					companionService.Profile();
 					sendCompanianInfo();
-					cWin.setState(companionService.CurrentState);
+                    ChangeStateCompanion?.Invoke(companionService.CurrentState);
+					//cWin.setState(companionService.CurrentState);
 					break;
 				default:
 					break;
