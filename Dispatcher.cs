@@ -230,6 +230,7 @@ namespace EdGo
 			}
 			cWin.setState(companionService.CurrentState);
 			cWin.ShowDialog();
+		    cWin = null;
 		}
 
 		public void companionNext()

@@ -67,6 +67,14 @@ namespace EdGo
 					break;
 			}
 		}
+        private void Window_Closing(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
 
-	}
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
+    }
 }
