@@ -84,6 +84,7 @@ namespace EdGo
 		public void setStartStopState(bool state = true) 
 		{
 			buttonProcess.IsEnabled = state;
+			buttonCompanion.IsEnabled = state;
 		}
 
 		private void textOut_TextChanged(object sender, TextChangedEventArgs e)

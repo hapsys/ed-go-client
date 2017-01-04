@@ -79,13 +79,15 @@ namespace EdGo
 		private void buttonOk_Click(object sender, RoutedEventArgs e)
 		{
 			client.saveDefault();
-			this.Close();
+			this.Hide();
 			AppDispatcher.instance.hideClientSettings();
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			//BrightIdeasSoftware.ObjectListView
+			e.Cancel = true;
+			this.Hide();
 			client.retunDefault();
 			AppDispatcher.instance.hideClientSettings();
 		}

@@ -363,6 +363,7 @@ namespace EdGo
 			bool result = false;
 			if (events.ContainsKey(eventName.ToLower()))
 			{
+				/*
 				if (eventName.ToLower().Equals("loadgame"))
 				{
 					String commander = regCommander.Replace(eventString, "$1");
@@ -376,6 +377,7 @@ namespace EdGo
 						//AppDispatcher.instance.newPilotDialog(commander);
 					}
 				}
+				*/
 				result = true;
 			}
 

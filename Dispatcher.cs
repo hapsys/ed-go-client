@@ -116,7 +116,7 @@ namespace EdGo
 					{
 						if (startInfo.ContainsKey("timestamp"))
 						{
-							setPilotNames(startInfo["used_names"]);
+							//setPilotNames(startInfo["used_names"]);
 							fileProc.setReset(startInfo["timestamp"], startInfo["event_name"], startInfo["event_hash"]);
 						} else
 						{
@@ -234,19 +234,26 @@ namespace EdGo
 			switch (companionService.CurrentState)
 			{
 				case CompanionAppService.State.NEEDS_LOGIN:
+					cWin.disableAll();
+					//Thread.Sleep(500);
 					companionService.Login();
 					cWin.setState(companionService.CurrentState);
 					break;
 				case CompanionAppService.State.NEEDS_CONFIRMATION:
+					cWin.disableAll();
+					//Thread.Sleep(500);
 					companionService.Confirm();
 					cWin.setState(companionService.CurrentState);
 					break;
 				case CompanionAppService.State.READY:
+					cWin.disableAll();
+					//Thread.Sleep(10000);
 					companionService.Profile();
 					sendCompanianInfo();
 					cWin.setState(companionService.CurrentState);
 					break;
 				default:
+					cWin.setState(companionService.CurrentState);
 					break;
 			}
 		}
@@ -255,7 +262,7 @@ namespace EdGo
 		{
 			if (companionService.CurrentState == CompanionAppService.State.READY && !string.IsNullOrEmpty(companionService.Content))
 			{
-				string data = "{ \"timestamp\":\"2037-01-01T00:00:00Z\", \"event\":\"CompanionApi\", \"CompanionData\": " + companionService.Content + " }";
+				string data = "{ \"timestamp\":\"2001-01-01T00:00:00Z\", \"event\":\"CompanionApi\", \"CompanionData\": " + companionService.Content + " }";
 				client.sendEvent(data);
 			}
 		}

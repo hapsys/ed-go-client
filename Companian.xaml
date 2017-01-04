@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdGo"
         mc:Ignorable="d"
-        Title="Companian Data" Height="260" Width="400">
+        Title="Companian Data" Height="260" Width="400" Closing="Window_Closing">
     <Grid>
         <Label x:Name="label" Content="E:D Account Email" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="inputEmail" Height="20" Margin="5,30,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="380" KeyUp="input_KeyUp"/>
@@ -15,7 +15,7 @@
         <TextBox x:Name="inputCode" Height="20" Margin="5,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="380" KeyUp="inputCode_KeyUp"/>
         <Button x:Name="buttonNext" Content="Next >>" HorizontalAlignment="Left" Margin="8,165,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="buttonNext_Click"/>
         <Button x:Name="buttonSend" Content="Send to Server" HorizontalAlignment="Left" Margin="100,165,0,0" VerticalAlignment="Top" Width="100" Height="25" Click="buttonNext_Click"/>
-        <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="215,165,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
+        <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="215,165,0,0" VerticalAlignment="Top" Width="75" Height="25" IsCancel="True"/>
 
     </Grid>
 </Window>
