@@ -25,8 +25,9 @@ namespace EdGo
 		private Regex regEvent = new Regex("^.*\"event\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private Regex regTimestamp = new Regex("^.*\"timestamp\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private Regex regCommander = new Regex("^.*\"Commander\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private Regex regBeta = new Regex("beta", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-		private static string homeDir = Environment.ExpandEnvironmentVariables("%USERPROFILE%") + "\\Saved Games\\Frontier Developments\\Elite Dangerous\\";
+        private static string homeDir = Environment.ExpandEnvironmentVariables("%USERPROFILE%") + "\\Saved Games\\Frontier Developments\\Elite Dangerous\\";
 		//private static string homeDir = "F:\\freelance\\elite-dangerous\\journals\\oleg\\";
 		//private List<FileDescription> files = null;
 		private StreamReader reader = null;
@@ -35,6 +36,9 @@ namespace EdGo
 
 		private String lastFile = null;
 		private int lastLine = 0;
+
+        private bool skipFile = false;
+
 		public FileProcessor()
         {
         }
@@ -109,6 +113,7 @@ namespace EdGo
 					bool found = false;
 					for (int i = idx; i >= 0 && !found; i--)
 					{
+                        skipFile = false;
 						String fn = homeDir + filelist[i].name;
 						logger.log("Scan file: " + filelist[i].name);
 						int lineIdx = 0;
@@ -117,13 +122,24 @@ namespace EdGo
 							using (reader = new StreamReader(fs, System.Text.Encoding.UTF8))
 							{
 								String line = null;
-								while ((line = reader.ReadLine()) != null)
+								while ((line = reader.ReadLine()) != null && !skipFile)
 								{
 									Thread.Sleep(1);
-									String timestamp = regTimestamp.Replace(line, "$1");
+                                    String eventName = regEvent.Replace(line, "$1");
+                                    if (eventName.Equals("Fileheader"))
+                                    {
+                                        if (regBeta.IsMatch(line))
+                                        {
+                                            skipFile = true;
+                                            break;
+                                        } else
+                                        {
+                                            skipFile = false;
+                                        }
+                                    }
+                                    String timestamp = regTimestamp.Replace(line, "$1");
 									if (timestamp.Equals(time))
 									{
-										String eventName = regEvent.Replace(line, "$1");
 										if (eventName.Equals(lastEvent))
 										{
 											String md5 = CreateMD5(line.Trim()).ToLower();
@@ -209,23 +225,52 @@ namespace EdGo
 						String fn = homeDir + fd.name;
 						FileStream fs = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 						reader = new StreamReader(fs, System.Text.Encoding.UTF8);
-						for(int j = 0; j < lastLine; j++)
+                        String line = null;
+                        for (int j = 0; j < lastLine; j++)
 						{
-							reader.ReadLine();
-						}
-						String line = null;
-						while ((line = reader.ReadLine()) != null)
+							line = reader.ReadLine();
+                            String eventName = regEvent.Replace(line, "$1");
+                            if (eventName.Equals("Fileheader"))
+                            {
+                                if (regBeta.IsMatch(line))
+                                {
+                                    skipFile = true;
+                                }
+                                else
+                                {
+                                    skipFile = false;
+                                }
+                            }
+                        }
+                        while ((line = reader.ReadLine()) != null)
 						{
-							lastLine++;
-							if (isProcess(line))
-							{
-								if (isNewCommander != null)
-								{
-									line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
-								}
-								sb.Append(line);
-							}
-							if (sb.Length > 8192)
+
+                            String eventName = regEvent.Replace(line, "$1");
+                            if (eventName.Equals("Fileheader"))
+                            {
+                                if (regBeta.IsMatch(line))
+                                {
+                                    skipFile = true;
+                                }
+                                else
+                                {
+                                    skipFile = false;
+                                }
+                            }
+
+                            lastLine++;
+
+                            if (!skipFile) { 
+							    if (isProcess(line))
+							    {
+								    if (isNewCommander != null)
+								    {
+									    line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
+								    }
+								    sb.Append(line);
+							    }
+                            }
+                            if (sb.Length > 8192)
 							{
 								logger.log("Sending to server: " + sb.Length + " bytes");
 								if (!processEvent(sb))
@@ -244,7 +289,7 @@ namespace EdGo
 					}
 					i--;
 				}
-				if (sb.Length > 0)
+				if (sb.Length > 0 && !skipFile)
 				{
 					logger.log("Sending to server last: " + sb.Length + " bytes");
 					if (!processEvent(sb))
@@ -327,8 +372,24 @@ namespace EdGo
 				while ((line = reader.ReadLine()) != null)
 				{
 					lastLine++;
-					if (isProcess(line))
+
+                    String eventName = regEvent.Replace(line, "$1");
+                    if (eventName.Equals("Fileheader"))
+                    {
+                        if (regBeta.IsMatch(line))
+                        {
+                            skipFile = true;
+                        }
+                        else
+                        {
+                            skipFile = false;
+                        }
+                    }
+
+
+                    if (!skipFile && isProcess(line))
 					{
+
 						if (isNewCommander != null)
 						{
 							line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
