@@ -12,11 +12,9 @@ namespace EdGo
     class FileProcessor
     {
 
-		private String[] eventsArray = {"Bounty", "Docked", "FSDJump", "FetchRemoteModule", "LoadGame", "Location",
-			"MaterialCollected", "MaterialDiscarded", "MaterialDiscovered", "MissionAbandoned", "MissionAccepted", "MissionCompleted",
-			"MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore", "ModuleSwap", "PowerplayCollect",
-			"PowerplayDefect", "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave", "PowerplaySalary", "PowerplayVote", "PowerplayVoucher",
-			"Progress", "Rank", "ShipyardBuy", "ShipyardNew", "ShipyardSell", "ShipyardSwap"};
+		private String[] eventsArray = {"Scan", "Bounty", "CompanionApi", "Docked", "FSDJump", "FetchRemoteModule", "LoadGame", "Location", "MaterialCollected", "MaterialDiscarded",
+            "MaterialDiscovered", "MissionAbandoned", "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore", "ModuleSwap", "PowerplayCollect", "PowerplayDefect",
+            "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave", "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "ShipyardBuy", "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit" };
 
 		IDictionary<String, byte> events = null;
 
@@ -270,7 +268,7 @@ namespace EdGo
 								    sb.Append(line);
 							    }
                             }
-                            if (sb.Length > 8192)
+                            if (sb.Length > 512000)
 							{
 								logger.log("Sending to server: " + sb.Length + " bytes");
 								if (!processEvent(sb))
@@ -464,7 +462,7 @@ namespace EdGo
 			}
 			catch (Exception e)
 			{
-
+                logger.log(e.Message);
 			}
 
 			return result;

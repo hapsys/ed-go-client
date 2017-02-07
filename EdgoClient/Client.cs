@@ -151,8 +151,9 @@ namespace EdGo.EdgoClient
 		}
 
 
-		protected String request(List<KeyValuePair<string, string>> parameters)
+		protected String request1(List<KeyValuePair<string, string>> parameters)
 		{
+            http.Timeout = TimeSpan.FromHours(1);
 			//var content = new FormUrlEncodedContent(parameters);
 			var content = "";
 			foreach (KeyValuePair< string, string> pair in parameters)
@@ -168,7 +169,7 @@ namespace EdGo.EdgoClient
 			request.Headers.Add("X-Requested-With", "XMLHttpRequest");
 			request.Method = HttpMethod.Post;
 			request.Content = new StringContent(content);
-			request.RequestUri = new Uri(url);
+            request.RequestUri = new Uri(url);
 
 			var response = http.SendAsync(request);
 
@@ -189,7 +190,43 @@ namespace EdGo.EdgoClient
 
 			return result;
 		}
-		public bool httpTest()
+
+        protected String request(List<KeyValuePair<string, string>> parameters)
+        {
+            var content = "";
+            foreach (KeyValuePair<string, string> pair in parameters)
+            {
+                string name = WebUtility.UrlEncode(pair.Key);
+                string value = WebUtility.UrlEncode(pair.Value);
+                content += name + "=" + value + "&";
+            }
+            String result = null;
+
+            var request = (HttpWebRequest)WebRequest.Create(url);
+
+            var data = Encoding.ASCII.GetBytes(content);
+
+            request.Method = "POST";
+            //request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("X-Requested-With", "XMLHttpRequest");
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = data.Length;
+            request.Timeout = 3600000;
+
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            result = new System.IO.StreamReader(response.GetResponseStream()).ReadToEnd();
+
+            return result;
+        }
+
+
+        public bool httpTest()
 		{
 
 			String data = base64Encode(encryptString("HELLO"));
@@ -296,6 +333,7 @@ namespace EdGo.EdgoClient
 			}
 			catch (Exception e)
 			{
+                logger.log(e.Message);
 			}
 
 			return result;
