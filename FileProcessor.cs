@@ -12,9 +12,11 @@ namespace EdGo
     class FileProcessor
     {
 
-		private String[] eventsArray = {"Scan", "Bounty", "CompanionApi", "Docked", "FSDJump", "FetchRemoteModule", "LoadGame", "Location", "MaterialCollected", "MaterialDiscarded",
-            "MaterialDiscovered", "MissionAbandoned", "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore", "ModuleSwap", "PowerplayCollect", "PowerplayDefect",
-            "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave", "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "ShipyardBuy", "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit" };
+		private String[] eventsArray = { "Bounty", "CompanionApi", "Docked", "EngineerCraft", "FSDJump", "FetchRemoteModule",
+            "LoadGame", "Location", "MaterialCollected", "MaterialDiscarded", "MaterialDiscovered", "Materials", "MissionAbandoned",
+            "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore",
+            "ModuleSwap", "PowerplayCollect", "PowerplayDefect", "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave",
+            "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy", "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "Synthesis" };
 
 		IDictionary<String, byte> events = null;
 
