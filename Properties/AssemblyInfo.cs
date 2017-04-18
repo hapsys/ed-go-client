@@ -53,3 +53,6 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: Guid("7d3c1e5b-2359-11e7-858d-d050996a3f6b")]
+[assembly: NeutralResourcesLanguage("en-US")]
+

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using EdGo.EdgoClient;
 using EddiCompanionAppService;
 namespace EdGo
@@ -235,23 +236,37 @@ namespace EdGo
 			{
 				case CompanionAppService.State.NEEDS_LOGIN:
 					cWin.disableAll();
-					//Thread.Sleep(500);
-					companionService.Login();
+                    try
+                    {
+                        companionService.Login();
+                        companionService.Credentials.Save();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message, "Companion API", MessageBoxButton.OK);
+                    }
 					cWin.setState(companionService.CurrentState);
 					break;
 				case CompanionAppService.State.NEEDS_CONFIRMATION:
 					cWin.disableAll();
-					//Thread.Sleep(500);
-					companionService.Confirm();
-					cWin.setState(companionService.CurrentState);
+                    try
+                    {
+                        companionService.Confirm();
+                        companionService.Credentials.Save();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message, "Companion API", MessageBoxButton.OK);
+                    }
+                    cWin.setState(companionService.CurrentState);
 					break;
 				case CompanionAppService.State.READY:
 					cWin.disableAll();
-					//Thread.Sleep(10000);
 					companionService.Profile();
 					sendCompanianInfo();
 					cWin.setState(companionService.CurrentState);
-					break;
+                    cWin.Hide();
+                    break;
 				default:
 					cWin.setState(companionService.CurrentState);
 					break;

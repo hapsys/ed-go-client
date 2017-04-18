@@ -184,7 +184,9 @@ namespace EddiCompanionAppService
 					logger.log(key + " ==> " + response.Headers[key]);
 				}
 
-				if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == ROOT_URL)
+                //logger.log(response.StatusCode.ToString());
+
+                if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == ROOT_URL)
                 {
                     CurrentState = State.READY;
                 }
@@ -192,6 +194,11 @@ namespace EddiCompanionAppService
                 {
                     CurrentState = State.NEEDS_LOGIN;
                     throw new EliteDangerousCompanionAppAuthenticationException("Confirmation code incorrect or expired");
+                }
+                else if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    //CurrentState = State.NEEDS_LOGIN;
+                    throw new EliteDangerousCompanionAppAuthenticationException("Confirmation code incorrect");
                 }
             }
         }
@@ -359,7 +366,6 @@ namespace EddiCompanionAppService
             }
             logger.log("Response is " + JsonConvert.SerializeObject(response));
             UpdateCredentials(response);
-            Credentials.Save();
 
             logger.log("Leaving");
             return response;
