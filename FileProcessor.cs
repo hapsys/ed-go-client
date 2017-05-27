@@ -13,10 +13,10 @@ namespace EdGo
     {
 
 		private String[] eventsArray = { "Bounty", "CompanionApi", "Docked", "EngineerCraft", "FSDJump", "FetchRemoteModule",
-            "LoadGame", "Location", "MaterialCollected", "MaterialDiscarded", "MaterialDiscovered", "Materials", "MissionAbandoned",
+            "LoadGame", "Loadout", "Location", "MaterialCollected", "MaterialDiscarded", "MaterialDiscovered", "Materials", "MissionAbandoned",
             "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore",
             "ModuleSwap", "PowerplayCollect", "PowerplayDefect", "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave",
-            "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy", "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "Synthesis" };
+            "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy", "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis" };
 
 		IDictionary<String, byte> events = null;
 
