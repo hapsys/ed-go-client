@@ -35,7 +35,7 @@ namespace EdGo
             InitializeComponent();
             //Create tray icon and setup initial settings for it
             trayIcon = new System.Windows.Forms.NotifyIcon();
-            trayIcon.Icon = new System.Drawing.Icon("../../satellite_icon-icons.com_60266.ico");  //I found it icon in project folder and add it for trayicon
+            trayIcon.Icon = Properties.Resources.icon;
             trayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info; //Shows tip on systim tray icon with caugtion about continuing working.
             trayIcon.BalloonTipText = "ED-GO Client still work in tray and continue tracking your flight journal!";
             trayIcon.BalloonTipTitle = "I am track your logs!";
