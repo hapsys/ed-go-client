@@ -27,14 +27,55 @@ namespace EdGo
 
 		private bool started = false;
 
-		public MainWindow()
+        System.Windows.Forms.NotifyIcon trayIcon; //Icon for system tray.
+
+
+        public MainWindow()
         {
             InitializeComponent();
-			TextLogger.instance.output = textOut;
+            //Create tray icon and setup initial settings for it
+            trayIcon = new System.Windows.Forms.NotifyIcon();
+            trayIcon.Icon = new System.Drawing.Icon("../../satellite_icon-icons.com_60266.ico");  //I found it icon in project folder and add it for trayicon
+            trayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info; //Shows tip on systim tray icon with caugtion about continuing working.
+            trayIcon.BalloonTipText = "ED-GO Client still work in tray and continue tracking your flight journal!";
+            trayIcon.BalloonTipTitle = "I am track your logs!";
+            trayIcon.Click += ToggleMinimizeState; //Handle click at tray icon
+            trayIcon.Visible = false;
+
+            TextLogger.instance.output = textOut;
 			AppDispatcher.instance.mWin = this;
 			AppDispatcher.instance.process();
 
 		}
+
+        // Toggle state between Normal and Minimized when click at trayIcon.
+        private void ToggleMinimizeState(object sender, EventArgs e)
+        {
+            bool isMinimized = this.WindowState == WindowState.Minimized;
+            if (isMinimized)
+            {
+                Show();
+                WindowState = WindowState.Normal;
+                trayIcon.Visible = false;
+            }
+            else
+            {
+                WindowState = WindowState.Minimized;
+                trayIcon.Visible = true;
+                Hide();
+            }
+        }
+
+        //Event for window state chenged, it added in MainWindow.xaml
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized)
+            {
+                trayIcon.Visible = true;
+                trayIcon.ShowBalloonTip(3000);
+                this.Hide();
+            }
+        }
 
         private void edgoSettings_Click(object sender, RoutedEventArgs e)
         {
@@ -122,6 +163,6 @@ namespace EdGo
 			Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
 			e.Handled = true;
 		}
-	}
+    }
 
 }

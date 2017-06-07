@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdGo"
         mc:Ignorable="d"
-        Title="ED-GO Event Client" Height="370" Width="525" Closed="Window_Closed">
+        Title="ED-GO Event Client" Height="370" Width="525" Closed="Window_Closed" Icon="satellite_icon-icons.com_60266.ico" ResizeMode="CanMinimize" StateChanged="Window_StateChanged">
     <Grid>
         <Button x:Name="edgoSettings" Content="ED-GO client settings " HorizontalAlignment="Left" Height="25" Margin="40,10,0,0" VerticalAlignment="Top" Width="467" Click="edgoSettings_Click"/>
         <Ellipse Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="25"/>
