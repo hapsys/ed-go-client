@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdGo"
         mc:Ignorable="d"
-        Title="Ed-go site settings" Height="310" Width="330" ResizeMode="NoResize" Closing="Window_Closing" WindowStartupLocation="CenterOwner">
-    <Grid Margin="10,10,10,10">
-        <Label x:Name="label" Content="URL:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="inputURL" Height="20" Margin="0,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
-        <Label x:Name="label1" Content="User ID:" HorizontalAlignment="Left" Margin="0,46,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="inputUserID" Height="23" Margin="0,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
-        <Label x:Name="label2" Content="User Key:" HorizontalAlignment="Left" Margin="0,95,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="inputUserKey" HorizontalAlignment="Left" Height="99" Margin="0,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
-        <Button x:Name="buttonTest" Content="Test" HorizontalAlignment="Left" Margin="14,225,0,0" VerticalAlignment="Top" Width="75" Click="buttonTest_Click"/>
-        <Button x:Name="buttonOk" Content="Save" HorizontalAlignment="Left" Margin="103,225,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonOk_Click"/>
-        <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="195,225,0,0" VerticalAlignment="Top" Width="75" IsCancel="True"/>
+        Title="Ed-go site settings" Height="321.171" Width="329.07" ResizeMode="NoResize" Closing="Window_Closing" WindowStartupLocation="CenterOwner" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+	<Grid Margin="0" VerticalAlignment="Top" Height="284">
+		<Label x:Name="label" Content="URL:" VerticalAlignment="Top" Margin="12,1,0,0" HorizontalAlignment="Left"/>
+		<TextBox x:Name="inputURL" Height="20" Margin="6,26,6,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
+		<Label x:Name="label1" Content="User ID:" Margin="12,49,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+		<TextBox x:Name="inputUserID" Height="23" Margin="6,77,6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
+		<Label x:Name="label2" Content="User Key:" Margin="12,97,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+		<TextBox x:Name="inputUserKey" Height="99" Margin="6,121,6,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
+		<Button x:Name="buttonTest" Content="Test" HorizontalAlignment="Left" Margin="26,254,0,0" VerticalAlignment="Top" Width="75" Click="buttonTest_Click" RenderTransformOrigin="0.521,2.403"/>
+		<Button x:Name="buttonOk" Content="Save" HorizontalAlignment="Left" Margin="115,254,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonOk_Click" RenderTransformOrigin="0.588,3.567"/>
+		<Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="207,254,0,0" VerticalAlignment="Top" Width="75" IsCancel="True"/>
+		<CheckBox x:Name="AutoStartChk" Content="Start with Windows" Margin="16,224,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+		<CheckBox x:Name="StartMinimizedChk" Content="Start Minimized" Margin="182,223,16,0" VerticalAlignment="Top" HorizontalAlignment="Right" HorizontalContentAlignment="Stretch"/>
 
-    </Grid>
+	</Grid>
 </Window>
