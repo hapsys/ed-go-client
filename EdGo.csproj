@@ -110,10 +110,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </Page>
     <Compile Include="CommandProcessor.cs" />
     <Compile Include="CompanionAppService\CompanionAppAuthenticationException.cs" />
     <Compile Include="CompanionAppService\CompanionAppCredentials.cs" />

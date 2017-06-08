@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using EdGo.EdgoClient;
+using Microsoft.Win32;
 
 namespace EdGo
 {
@@ -20,12 +21,12 @@ namespace EdGo
     /// </summary>
     public partial class ClientWindow : Window
     {
-
+        RegistryKey AutoStartRK;
 		Client client = Client.instance;
         public ClientWindow()
         {
             InitializeComponent();
-			getSettings();
+            getSettings();
 			showButtons();
         }
 		private void showButtons()
@@ -52,7 +53,19 @@ namespace EdGo
 			inputURL.Text = client.url;
 			inputUserID.Text = client.userId;
 			inputUserKey.Text = client.userKey;
-		}
+
+            AutoStartRK = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (AutoStartRK.GetValue(System.Windows.Forms.Application.ProductName) == null)
+            {
+                AutoStartChk.IsChecked = false;
+            } else
+            {
+                AutoStartChk.IsChecked = true;
+            }
+
+            StartMinimizedChk.IsChecked = Properties.Settings.Default.StartMinimized;
+
+        }
 		private void inputs_KeyUp(object sender, KeyEventArgs e)
 		{
 			client.url = inputURL.Text;
@@ -78,8 +91,17 @@ namespace EdGo
 
 		private void buttonOk_Click(object sender, RoutedEventArgs e)
 		{
-			client.saveDefault();
-			this.Hide();
+            if (StartMinimizedChk.IsChecked == true)
+            {
+                AutoStartRK.SetValue(System.Windows.Forms.Application.ProductName, System.Windows.Forms.Application.ExecutablePath.ToString());
+            } else
+            {
+                if (AutoStartRK.GetValue(System.Windows.Forms.Application.ProductName) != null) AutoStartRK.DeleteValue(System.Windows.Forms.Application.ProductName);
+            }
+            Properties.Settings.Default.StartMinimized = (StartMinimizedChk.IsChecked == true);
+
+            client.saveDefault();
+            this.Hide();
 			AppDispatcher.instance.hideClientSettings();
 		}
 
@@ -91,5 +113,6 @@ namespace EdGo
 			client.retunDefault();
 			AppDispatcher.instance.hideClientSettings();
 		}
-	}
+
+    }
 }
