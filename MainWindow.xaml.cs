@@ -46,24 +46,24 @@ namespace EdGo
             {
                 WindowState = WindowState.Minimized;
                 trayIcon.Visible = true;
-                Hide();
+                this.Visibility = Visibility.Hidden;
             }
 
             TextLogger.instance.output = textOut;
 			AppDispatcher.instance.mWin = this;
 			AppDispatcher.instance.process();
 
-		}
+        }
         
         // Toggle state between Normal and Minimized when click at trayIcon.
         private void ToggleMinimizeState(object sender, EventArgs e)
         {
             bool isMinimized = this.WindowState == WindowState.Minimized;
-            if (!isMinimized)
+            if (isMinimized)
             {
-                WindowState = WindowState.Minimized;
-                trayIcon.Visible = true;
-                Hide();
+                Show();
+                WindowState = WindowState.Normal;
+                trayIcon.Visible = false;
             }
         }
 

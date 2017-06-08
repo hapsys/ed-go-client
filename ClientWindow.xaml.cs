@@ -63,6 +63,8 @@ namespace EdGo
                 AutoStartChk.IsChecked = true;
             }
 
+            StartMinimizedChk.IsChecked = Properties.Settings.Default.StartMinimized;
+
         }
 		private void inputs_KeyUp(object sender, KeyEventArgs e)
 		{
