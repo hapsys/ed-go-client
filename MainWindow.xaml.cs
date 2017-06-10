@@ -53,6 +53,7 @@ namespace EdGo
 			AppDispatcher.instance.mWin = this;
 			AppDispatcher.instance.process();
 
+            if (Properties.Settings.Default.AutoStartProc) AppDispatcher.instance.pressStart();
         }
         
         // Toggle state between Normal and Minimized when click at trayIcon.
