@@ -47,3 +47,4 @@ ClientBin/
 *.jfm
 *.pfx
 *.publishsettings
+.vs
