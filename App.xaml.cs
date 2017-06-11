@@ -18,7 +18,7 @@ namespace EdGo
 
     public partial class App : Application
     {
-        private static Mutex mutex = new Mutex(true, "##||EdGoClient||##");
+        private static Mutex mutex = new Mutex(true, "1f2886dd-1217-4b97-9709-21c6c04597d1");
         private static MainWindow mainWindow = null;
 
         public App()
