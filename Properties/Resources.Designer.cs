@@ -69,5 +69,25 @@ namespace EdGo.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon started {
+            get {
+                object obj = ResourceManager.GetObject("started", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
+        /// </summary>
+        internal static System.Drawing.Icon stoped {
+            get {
+                object obj = ResourceManager.GetObject("stoped", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

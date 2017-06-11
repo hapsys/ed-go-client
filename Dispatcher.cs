@@ -139,12 +139,14 @@ namespace EdGo
 			started = !started;
 			if (started)
 			{
-				mWin.showStopButton();
+                mWin.trayIcon.Icon = Properties.Resources.started;
+                mWin.showStopButton();
 				process();
 			}
 			else
 			{
-				killAllTasks();
+                mWin.trayIcon.Icon = Properties.Resources.stoped;
+                killAllTasks();
 				mWin.showStartButton();
 			}
 		}
