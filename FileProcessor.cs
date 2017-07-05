@@ -444,8 +444,7 @@ namespace EdGo
 
                 if (eventName.ToLower().Equals("screenshot") && (Properties.Settings.Default.ScreenshotConvert == true))
                 {
-                    String fileName = regScreenshotName.Replace(eventString, "$1");
-                    Thread threadScreenshotConvert = new Thread(() => ConvertScreenshot(fileName));
+                    Thread threadScreenshotConvert = new Thread(() => ConvertScreenshot(eventString));
                     threadScreenshotConvert.Start();
                 }
 
@@ -455,12 +454,15 @@ namespace EdGo
 			return result;
 		}
 
-        private void ConvertScreenshot(String filename)
+        private void ConvertScreenshot(String eventString)
         {
+            String filename = regScreenshotName.Replace(eventString, "$1");
             String ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
             TextLogger.instance.log("Process screenshot: " + filename);
             System.Drawing.Image screenshot = System.Drawing.Image.FromFile(ScreenshotPath + filename+".bmp");
-            screenshot.Save(ScreenshotPath + filename + ".png", System.Drawing.Imaging.ImageFormat.Png);
+            String[] ScreenshotsList = Directory.GetFiles(ScreenshotPath,"Screenshot_*.png");
+            String index = String.Format("{0,4:0000}",ScreenshotsList.Length);
+            screenshot.Save(ScreenshotPath + "Screenshot_" +index+ ".png", System.Drawing.Imaging.ImageFormat.Png);
             screenshot.Dispose();
             File.Delete(ScreenshotPath + filename + ".bmp");
         }
