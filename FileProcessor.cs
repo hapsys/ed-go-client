@@ -461,7 +461,8 @@ namespace EdGo
             TextLogger.instance.log("Process screenshot: " + filename);
             System.Drawing.Image screenshot = System.Drawing.Image.FromFile(ScreenshotPath + filename+".bmp");
             String[] ScreenshotsList = Directory.GetFiles(ScreenshotPath,"Screenshot_*.png");
-            String index = String.Format("{0,4:0000}",ScreenshotsList.Length);
+            Array.Sort(ScreenshotsList);
+            String index = String.Format("{0,4:0000}", (Int32.Parse(Path.GetFileNameWithoutExtension(ScreenshotsList[ScreenshotsList.Length-1]).Substring(11)))+1);
             screenshot.Save(ScreenshotPath + "Screenshot_" +index+ ".png", System.Drawing.Imaging.ImageFormat.Png);
             screenshot.Dispose();
             File.Delete(ScreenshotPath + filename + ".bmp");
