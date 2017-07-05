@@ -39,7 +39,7 @@ namespace EdGo
             trayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info; //Shows tip on systim tray icon with caugtion about continuing working.
             trayIcon.BalloonTipText = "ED-GO Client still work in tray and continue tracking your flight journal!";
             trayIcon.BalloonTipTitle = "I am track your logs!";
-            trayIcon.Click += ToggleMinimizeState; //Handle click at tray icon
+            trayIcon.DoubleClick += ToggleMinimizeState; //Handle double click at tray icon
             trayIcon.Visible = false;
 
             if (Properties.Settings.Default.StartMinimized)
@@ -56,7 +56,7 @@ namespace EdGo
             if (Properties.Settings.Default.AutoStartProc) AppDispatcher.instance.pressStart();
         }
         
-        // Toggle state between Normal and Minimized when click at trayIcon.
+        // Toggle state between Normal and Minimized when double click at trayIcon.
         private void ToggleMinimizeState(object sender, EventArgs e)
         {
             bool isMinimized = this.WindowState == WindowState.Minimized;
