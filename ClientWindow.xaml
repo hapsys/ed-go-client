@@ -5,20 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EdGo"
         mc:Ignorable="d"
-        Title="Ed-go site settings" Height="336.602" Width="329.07" ResizeMode="NoResize" Closing="Window_Closing" WindowStartupLocation="CenterOwner" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-	<Grid Margin="0" VerticalAlignment="Top" Height="304">
+        Title="Ed-go site settings" Height="455.602" Width="330" ResizeMode="NoResize" Closing="Window_Closing" WindowStartupLocation="CenterOwner" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+	<Grid Margin="0" Width="330" HorizontalAlignment="Center" VerticalAlignment="Center" Height="426">
 		<Label x:Name="label" Content="URL:" VerticalAlignment="Top" Margin="12,1,0,0" HorizontalAlignment="Left"/>
 		<TextBox x:Name="inputURL" Height="20" Margin="6,26,6,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
 		<Label x:Name="label1" Content="User ID:" Margin="12,49,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 		<TextBox x:Name="inputUserID" Height="23" Margin="6,77,6,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
 		<Label x:Name="label2" Content="User Key:" Margin="12,97,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 		<TextBox x:Name="inputUserKey" Height="99" Margin="6,121,6,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="292" KeyUp="inputs_KeyUp"/>
-		<Button x:Name="buttonTest" Content="Test" HorizontalAlignment="Left" Margin="31,269,0,-5" VerticalAlignment="Top" Width="75" Click="buttonTest_Click" RenderTransformOrigin="0.521,2.403"/>
-		<Button x:Name="buttonOk" Content="Save" HorizontalAlignment="Left" Margin="120,269,0,-5" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonOk_Click" RenderTransformOrigin="0.588,3.567"/>
-		<Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="212,269,0,-5" VerticalAlignment="Top" Width="75" IsCancel="True"/>
+		<Button x:Name="buttonTest" Content="Test" Margin="16,388,0,0" VerticalAlignment="Top" Width="75" Click="buttonTest_Click" HorizontalAlignment="Left"/>
+		<Button x:Name="buttonOk" Content="Save" Margin="122,388,122,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="buttonOk_Click" MinWidth="75" MinHeight="20" ScrollViewer.VerticalScrollBarVisibility="Disabled" MaxHeight="20" MaxWidth="75"/>
+		<Button x:Name="buttonCancel" Content="Cancel" Margin="0,388,16,0" VerticalAlignment="Top" Width="75" IsCancel="True" HorizontalAlignment="Right" Click="buttonCancel_Click"/>
 		<CheckBox x:Name="AutoStartChk" Content="Start with Windows" Margin="16,224,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 		<CheckBox x:Name="StartMinimizedChk" Content="Start Minimized" Margin="182,223,16,0" VerticalAlignment="Top" HorizontalAlignment="Right" HorizontalContentAlignment="Stretch"/>
 		<CheckBox x:Name="StartProcChk" Content="Start processing journals when launch app" HorizontalAlignment="Left" Margin="16,249,0,0" VerticalAlignment="Top"/>
-
+		<CheckBox x:Name="chkScreenshotConvert" Content="Convert screenshots to png" HorizontalAlignment="Left" Margin="16,291,0,0" VerticalAlignment="Top" Width="291"/>
+		<Separator HorizontalAlignment="Left" Height="17" Margin="4,269,0,0" VerticalAlignment="Top" Width="303"/>
+		<CheckBox x:Name="chkScreenshotUpload" Content="Upload screenshots to the gallery" HorizontalAlignment="Left" Margin="16,311,0,0" VerticalAlignment="Top" Width="291" IsEnabled="False"/>
+		<Button x:Name="ResetScreenshotPath" Content="Reset" Margin="0,354,16,0" VerticalAlignment="Top" Width="50" Click="ResetScreenshotPath_Click" HorizontalContentAlignment="Center" HorizontalAlignment="Right"/>
+		<Button x:Name="SelectScreenshotPath" Content="Select" HorizontalAlignment="Left" Margin="202,354,0,0" VerticalAlignment="Top" Width="50" Click="SelectScreenshotPath_Click"/>
+		<TextBox x:Name="ScreenshotsPath" HorizontalAlignment="Left" Height="20" Margin="10,354,0,0" VerticalAlignment="Top" Width="187"/>
+		<Label Content="Screenshots folder:" HorizontalAlignment="Left" Margin="10,331,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.342,0.423" Width="147"/>
 	</Grid>
+
 </Window>

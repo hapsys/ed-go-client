@@ -17,14 +17,15 @@ namespace EdGo
             "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore",
             "ModuleSwap", "PowerplayCollect", "PowerplayDefect", "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave",
             "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy",
-            "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff", "Touchdown"};
+            "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff", "Touchdown", "Screenshot"};
 
 		IDictionary<String, byte> events = null;
 
 
 		private Regex reg = new Regex("^.*/([^/]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private Regex regEvent = new Regex("^.*\"event\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-		private Regex regTimestamp = new Regex("^.*\"timestamp\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private Regex regScreenshotName = new Regex("^.*\"Filename\"\\:\"\\\\\\\\ED_Pictures\\\\\\\\([^\"]+).bmp\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private Regex regTimestamp = new Regex("^.*\"timestamp\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private Regex regCommander = new Regex("^.*\"Commander\"\\:\"([^\"]+)\".*$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private Regex regBeta = new Regex("beta", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -425,7 +426,7 @@ namespace EdGo
 			bool result = false;
 			if (events.ContainsKey(eventName.ToLower()))
 			{
-				/*
+                /*
 				if (eventName.ToLower().Equals("loadgame"))
 				{
 					String commander = regCommander.Replace(eventString, "$1");
@@ -440,13 +441,31 @@ namespace EdGo
 					}
 				}
 				*/
-				result = true;
+
+                if (eventName.ToLower().Equals("screenshot") && (Properties.Settings.Default.ScreenshotConvert == true))
+                {
+                    String fileName = regScreenshotName.Replace(eventString, "$1");
+                    Thread threadScreenshotConvert = new Thread(() => ConvertScreenshot(fileName));
+                    threadScreenshotConvert.Start();
+                }
+
+            result = true;
 			}
 
 			return result;
 		}
 
-		private bool processEvent(StringBuilder sb)
+        private void ConvertScreenshot(String filename)
+        {
+            String ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+            TextLogger.instance.log("Process screenshot: " + filename);
+            System.Drawing.Image screenshot = System.Drawing.Image.FromFile(ScreenshotPath + filename+".bmp");
+            screenshot.Save(ScreenshotPath + filename + ".png", System.Drawing.Imaging.ImageFormat.Png);
+            screenshot.Dispose();
+            File.Delete(ScreenshotPath + filename + ".bmp");
+        }
+
+        private bool processEvent(StringBuilder sb)
 		{
 			return processEvent(sb.ToString());
 		}

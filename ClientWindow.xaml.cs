@@ -23,11 +23,15 @@ namespace EdGo
     {
         RegistryKey AutoStartRK;
 		Client client = Client.instance;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+
         public ClientWindow()
         {
             InitializeComponent();
             getSettings();
 			showButtons();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowserDialog1.ShowNewFolderButton = false;
         }
 		private void showButtons()
 		{
@@ -61,6 +65,17 @@ namespace EdGo
             } else
             {
                 AutoStartChk.IsChecked = true;
+            }
+
+            chkScreenshotUpload.IsChecked = Properties.Settings.Default.ScreenshotUpload;
+            chkScreenshotConvert.IsChecked = Properties.Settings.Default.ScreenshotConvert;
+            if (Properties.Settings.Default.ScreenshotPath.Equals("default", StringComparison.OrdinalIgnoreCase) || (Properties.Settings.Default.ScreenshotPath == null))
+            {
+                ScreenshotsPath.Text = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+            }
+            else
+            {
+                ScreenshotsPath.Text = Properties.Settings.Default.ScreenshotPath;
             }
 
             StartMinimizedChk.IsChecked = Properties.Settings.Default.StartMinimized;
@@ -103,6 +118,9 @@ namespace EdGo
             }
             Properties.Settings.Default.StartMinimized = (StartMinimizedChk.IsChecked == true);
             Properties.Settings.Default.AutoStartProc = (StartProcChk.IsChecked == true);
+            Properties.Settings.Default.ScreenshotConvert = (chkScreenshotConvert.IsChecked == true);
+            Properties.Settings.Default.ScreenshotUpload = (chkScreenshotUpload.IsChecked == true);
+            Properties.Settings.Default.ScreenshotPath = ScreenshotsPath.Text;
 
             client.saveDefault();
             this.Hide();
@@ -118,5 +136,25 @@ namespace EdGo
 			AppDispatcher.instance.hideClientSettings();
 		}
 
+        private void ResetScreenshotPath_Click(object sender, RoutedEventArgs e)
+        {
+            ScreenshotsPath.Text = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+        }
+
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            client.retunDefault();
+            AppDispatcher.instance.hideClientSettings();
+        }
+
+        private void SelectScreenshotPath_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                ScreenshotsPath.Text = folderBrowserDialog1.SelectedPath;
+            }
+        }
     }
 }

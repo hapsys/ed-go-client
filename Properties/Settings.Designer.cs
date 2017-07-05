@@ -178,5 +178,41 @@ namespace EdGo.Properties {
                 this["AutoStartProc"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScreenshotUpload {
+            get {
+                return ((bool)(this["ScreenshotUpload"]));
+            }
+            set {
+                this["ScreenshotUpload"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScreenshotConvert {
+            get {
+                return ((bool)(this["ScreenshotConvert"]));
+            }
+            set {
+                this["ScreenshotConvert"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("default")]
+        public string ScreenshotPath {
+            get {
+                return ((string)(this["ScreenshotPath"]));
+            }
+            set {
+                this["ScreenshotPath"] = value;
+            }
+        }
     }
 }
