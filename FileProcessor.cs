@@ -459,6 +459,12 @@ namespace EdGo
             String filename = regScreenshotName.Replace(eventString, "$1");
             String ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
             TextLogger.instance.log("Process screenshot: " + filename);
+            if (!File.Exists(ScreenshotPath + filename + ".bmp"))
+            {
+                TextLogger.instance.log("Screenshot " + filename + "not found, check screenshots folder path.");
+                return;
+            }
+
             System.Drawing.Image screenshot = System.Drawing.Image.FromFile(ScreenshotPath + filename+".bmp");
             String[] ScreenshotsList = Directory.GetFiles(ScreenshotPath,"Screenshot_*.png");
             Array.Sort(ScreenshotsList);
