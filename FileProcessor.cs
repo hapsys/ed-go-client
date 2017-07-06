@@ -468,7 +468,7 @@ namespace EdGo
             System.Drawing.Image screenshot = System.Drawing.Image.FromFile(ScreenshotPath + filename+".bmp");
             String[] ScreenshotsList = Directory.GetFiles(ScreenshotPath,"Screenshot_*.png");
             Array.Sort(ScreenshotsList);
-            String index = String.Format("{0,4:0000}", (Int32.Parse(Path.GetFileNameWithoutExtension(ScreenshotsList[ScreenshotsList.Length-1]).Substring(11)))+1);
+            String index = ScreenshotsList.Length == 0 ? "0000" : String.Format("{0,4:0000}", (Int32.Parse(Path.GetFileNameWithoutExtension(ScreenshotsList[ScreenshotsList.Length - 1]).Substring(11))) + 1);
             screenshot.Save(ScreenshotPath + "Screenshot_" +index+ ".png", System.Drawing.Imaging.ImageFormat.Png);
             screenshot.Dispose();
             File.Delete(ScreenshotPath + filename + ".bmp");
