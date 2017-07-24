@@ -457,11 +457,15 @@ namespace EdGo
         private void ConvertScreenshot(String eventString)
         {
             String filename = regScreenshotName.Replace(eventString, "$1");
-            String ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+            String ScreenshotPath = Properties.Settings.Default.ScreenshotPath;
+
+            if (ScreenshotPath.Equals("Default") || ScreenshotPath.Length==0)
+                ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+
             TextLogger.instance.log("Process screenshot: " + filename);
             if (!File.Exists(ScreenshotPath + filename + ".bmp"))
             {
-                TextLogger.instance.log("Screenshot " + filename + "not found, check screenshots folder path.");
+                TextLogger.instance.log("Screenshot " + filename + " not found or it already processed, check screenshots folder path.");
                 return;
             }
 
