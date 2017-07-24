@@ -41,6 +41,12 @@ namespace EdGo
             trayIcon.BalloonTipTitle = "I am track your logs!";
             trayIcon.DoubleClick += ToggleMinimizeState; //Handle double click at tray icon
             trayIcon.Visible = false;
+            trayIcon.ContextMenu = new System.Windows.Forms.ContextMenu();
+
+            trayIcon.ContextMenu.MenuItems.Add("Open screenshots folder", OpenScreenshotFolder);
+            trayIcon.ContextMenu.MenuItems.Add("Open journals folder", OpenJournalsFolder);
+            trayIcon.ContextMenu.MenuItems.Add("-");
+            trayIcon.ContextMenu.MenuItems.Add("Exit", Window_Closed);
 
             if (Properties.Settings.Default.StartMinimized)
             {
@@ -55,7 +61,23 @@ namespace EdGo
 
             if (Properties.Settings.Default.AutoStartProc) AppDispatcher.instance.pressStart();
         }
-        
+
+        private void OpenScreenshotFolder(object sender, EventArgs e)
+        {
+            String ScreenshotPath = Properties.Settings.Default.ScreenshotPath;
+
+            if (ScreenshotPath.Equals("Default") || ScreenshotPath.Length == 0)
+                ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+
+            Process.Start(@ScreenshotPath);
+        }
+
+
+        private void OpenJournalsFolder(object sender, EventArgs e)
+        {
+            string homeDir = Environment.ExpandEnvironmentVariables("%USERPROFILE%") + "\\Saved Games\\Frontier Developments\\Elite Dangerous\\";
+            Process.Start(@homeDir);
+        }
         // Toggle state between Normal and Minimized when double click at trayIcon.
         private void ToggleMinimizeState(object sender, EventArgs e)
         {
