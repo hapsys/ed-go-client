@@ -229,15 +229,18 @@ namespace EdGo.EdgoClient
         public bool httpTest()
 		{
 
-			String data = base64Encode(encryptString("HELLO"));
+            String data = "HELLO";
+            String secret = base64Encode(encryptString(data));
 
-			var pairs = new List<KeyValuePair<string, string>>
-			{
-				new KeyValuePair<string, string>("userID", userId),
-				new KeyValuePair<string, string>("data", data),
-			};
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("userID", userId),
+                new KeyValuePair<string, string>("data", data),
+                new KeyValuePair<string, string>("secretKey", secret),
+            };
 
-			bool result = false;
+
+            bool result = false;
 
 			String stringContent = request(pairs);
 
@@ -261,13 +264,16 @@ namespace EdGo.EdgoClient
 		{
 			lastCommand = "RESUME";
 
-			String data = base64Encode(encryptString("RESUME"));
+            //String data = base64Encode(encryptString("RESUME"));
+            String data = "RESUME";
+            String secret = base64Encode(encryptString(data));
 
-			var pairs = new List<KeyValuePair<string, string>>
+            var pairs = new List<KeyValuePair<string, string>>
 			{
 				new KeyValuePair<string, string>("userID", userId),
 				new KeyValuePair<string, string>("data", data),
-			};
+                new KeyValuePair<string, string>("secretKey", secret),
+            };
 
 			String stringContent = request(pairs);
 
@@ -310,13 +316,15 @@ namespace EdGo.EdgoClient
 
 			lastCommand = events;
 
-			String data = base64Encode(encryptString(events));
+			String data = events.Trim();
+            String secret = base64Encode(encryptString(data.Length > 2048? data.Substring(0, 2048).Trim(): data));
 
-			var pairs = new List<KeyValuePair<string, string>>
-			{
-				new KeyValuePair<string, string>("userID", userId),
-				new KeyValuePair<string, string>("data", data),
-			};
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("userID", userId),
+                new KeyValuePair<string, string>("data", data),
+                new KeyValuePair<string, string>("secretKey", secret),
+            };
 
 			String stringContent = request(pairs);
 
