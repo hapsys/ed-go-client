@@ -303,7 +303,7 @@ namespace EdGo.EdgoClient
 
             String data = desCoder.encode(events.Trim());
 
-            Console.WriteLine("1");
+            //Console.WriteLine("1");
 
             var pairs = new List<KeyValuePair<string, string>>
             {

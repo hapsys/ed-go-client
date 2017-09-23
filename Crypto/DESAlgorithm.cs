@@ -12,8 +12,8 @@ namespace EdGo.Crypto
     class DESAlgorithm : CryptoAlgorithm
     {
 
-        DesParameters key = null;
-        BufferedBlockCipher ecipher = null;
+        private DesParameters key = null;
+        private BufferedBlockCipher ecipher = null;
         //DesEngine dcipher = null;
 
 
@@ -33,7 +33,15 @@ namespace EdGo.Crypto
 
             byte[] bytesToEncrypt = Encoding.UTF8.GetBytes(source);
 
-            byte[] cipherbytes = ecipher.DoFinal(bytesToEncrypt);
+            int blockSize = ecipher.GetBlockSize();
+            int resultLength = bytesToEncrypt.Length / blockSize + (bytesToEncrypt.Length % blockSize > 0 ? 1 : 0);
+
+            byte[] buffer = new byte[resultLength * blockSize];
+
+            Array.Copy(bytesToEncrypt, 0, buffer, 0, bytesToEncrypt.Length);
+
+            byte[] cipherbytes = ecipher.DoFinal(buffer);
+
             return Convert.ToBase64String(cipherbytes);
         }
 
