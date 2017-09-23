@@ -121,6 +121,9 @@
     <Compile Include="CompanionAppService\CompanionAppException.cs" />
     <Compile Include="CompanionAppService\CompanionAppService.cs" />
     <Compile Include="CompanionAppService\CompanionIllegalStateException.cs" />
+    <Compile Include="Crypto\CryptoAlgorithm.cs" />
+    <Compile Include="Crypto\DESAlgorithm.cs" />
+    <Compile Include="Crypto\RSAAlgorithm.cs" />
     <Compile Include="Dispatcher.cs" />
     <Compile Include="TextLogger.cs" />
     <Compile Include="Companian.xaml.cs">

@@ -17,6 +17,8 @@ using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Parameters;
 
+using EdGo.Crypto;
+
 namespace EdGo.EdgoClient
 {
 	class Client
@@ -57,9 +59,14 @@ namespace EdGo.EdgoClient
 			}
 		}
 
-		private Pkcs1Encoding encryptEngine = null;
+        private CryptoAlgorithm coder = null;
 
-		private HttpClient http = new HttpClient();
+        private String desKey = null;
+
+        private CryptoAlgorithm desCoder = null;
+
+
+        private HttpClient http = new HttpClient();
 
 		private TextLogger logger = TextLogger.instance;
 		protected Client()
@@ -94,64 +101,26 @@ namespace EdGo.EdgoClient
 		}
 
 
-		private void cryptInit()
-		{
-			RsaKeyParameters publicKey = (RsaKeyParameters)PublicKeyFactory.CreateKey(pgpKey);
-			encryptEngine = new Pkcs1Encoding(new RsaEngine());
-			encryptEngine.Init(true, publicKey);
-		}
-		private void cryptInitPrivate()
-		{
-			RsaPrivateCrtKeyParameters privateKey = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(pgpKey);
-			encryptEngine = new Pkcs1Encoding(new RsaEngine());
-			encryptEngine.Init(true, privateKey); // ????
+        private void rsaInit()
+        {
+            if (coder == null) {
+                RsaKeyParameters publicKey = (RsaKeyParameters)PublicKeyFactory.CreateKey(pgpKey);
+                coder = new RSAAlgorithm(publicKey);
+            }
+
 		}
 
-		private byte[] encryptString(String source)
-		{
-			
-			if (encryptEngine == null) {
-				cryptInit();
-			}
+        private void desInit()
+        {
+            if (desCoder == null)
+            {
+                desCoder = new DESAlgorithm(desKey);
+            }
 
-			byte[] bytesToEncrypt = Encoding.UTF8.GetBytes(source);
-			int inLength = encryptEngine.GetInputBlockSize();
-
-
-			int resultLength = bytesToEncrypt.Length / inLength + (bytesToEncrypt.Length % inLength > 0 ? 1 : 0);
-			byte[] cipherbytes = new byte[resultLength * encryptEngine.GetOutputBlockSize()];
-			int start = 0;
-			int copyIdx = 0;
-			//logger.log("Bytes length: " + bytesToEncrypt.Length);
-			int length = (bytesToEncrypt.Length - start) > inLength ? inLength : bytesToEncrypt.Length - start;
-			while (start < bytesToEncrypt.Length)
-			{
-				byte[] encBuffer = new byte[length];
-				byte[] buffer = encryptEngine.ProcessBlock(bytesToEncrypt, start, length);
-				//logger.log("Bytes ctypted: " + buffer.Length);
-				//Console.WriteLine("Start: " + start + "\t Length: " + buffer.Length);
-				Array.Copy(buffer, 0, cipherbytes, copyIdx, buffer.Length);
-				start += inLength;
-				copyIdx += buffer.Length;
-				length = (bytesToEncrypt.Length - start) > inLength ? inLength : bytesToEncrypt.Length - start;
-			}
-			return cipherbytes;
-		}
-
-		private byte[] decryptString(byte[] source)
-		{
-			/*
-			if (rsa == null)
-			{
-				cryptInit();
-			}
-			*/
-			byte[] cipherbytes = null; // = rsa.Decrypt(source, false);
-			return cipherbytes;
-		}
+        }
 
 
-		protected String request1(List<KeyValuePair<string, string>> parameters)
+        protected String request1(List<KeyValuePair<string, string>> parameters)
 		{
             http.Timeout = TimeSpan.FromHours(1);
 			//var content = new FormUrlEncodedContent(parameters);
@@ -229,8 +198,11 @@ namespace EdGo.EdgoClient
         public bool httpTest()
 		{
 
+            rsaInit();
+
             String data = "HELLO";
-            String secret = base64Encode(encryptString(data));
+            //String secret = base64Encode(encryptString(data));
+            String secret = coder.encode(data);
 
             var pairs = new List<KeyValuePair<string, string>>
             {
@@ -262,11 +234,14 @@ namespace EdGo.EdgoClient
 
 		public IDictionary<string, string> getLastInfo()
 		{
-			lastCommand = "RESUME";
+
+            rsaInit();
+
+            lastCommand = "RESUME";
 
             //String data = base64Encode(encryptString("RESUME"));
             String data = "RESUME";
-            String secret = base64Encode(encryptString(data));
+            String secret = coder.encode(data);
 
             var pairs = new List<KeyValuePair<string, string>>
 			{
@@ -283,13 +258,17 @@ namespace EdGo.EdgoClient
 
 			IDictionary<string, string> result = null;
 
+            String secretKey = null;
+
 			try
 			{
 				IDictionary<string, object> values = JsonConvert.DeserializeObject<Dictionary<string, object>>(stringContent);
 				if (values.ContainsKey("result") && "OK".Equals(values["result"]) && values.ContainsKey("data"))
 				{
 
-					String str = reg.Replace(stringContent, "$1");
+                    secretKey = values["secretKey"].ToString();
+
+                    String str = reg.Replace(stringContent, "$1");
 					//Console.WriteLine(str);
 					logger.log(str);
 					if ("{}".Equals(str))
@@ -308,7 +287,10 @@ namespace EdGo.EdgoClient
 			{
 			}
 
-			return result;
+            desKey = coder.decode(secretKey);
+            desCoder = null;
+
+            return result;
 		}
 
 		public IDictionary<string, object> sendEvent(String events)
@@ -316,14 +298,17 @@ namespace EdGo.EdgoClient
 
 			lastCommand = events;
 
-			String data = events.Trim();
-            String secret = base64Encode(encryptString(data.Length > 2048? data.Substring(0, 2048).Trim(): data));
+
+            desInit();
+
+            String data = desCoder.encode(events.Trim());
+
+            Console.WriteLine("1");
 
             var pairs = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("userID", userId),
                 new KeyValuePair<string, string>("data", data),
-                new KeyValuePair<string, string>("secretKey", secret),
             };
 
 			String stringContent = request(pairs);
