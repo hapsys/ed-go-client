@@ -265,11 +265,11 @@ namespace EdGo
                             if (!skipFile) { 
 							    if (isProcess(line))
 							    {
-								    if (isNewCommander != null)
-								    {
-									    line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
-								    }
-								    sb.Append(line);
+                                    if (eventName.Equals("Screenshot"))
+                                    {
+                                        line = processScreenshot(line);
+                                    }
+                                    sb.Append(line);
 							    }
                             }
                             if (sb.Length > 512000)
@@ -392,12 +392,13 @@ namespace EdGo
                     if (!skipFile && isProcess(line))
 					{
 
-						if (isNewCommander != null)
-						{
-							line = "{" + "\"IsNew\"=\"" + isNewCommander + "\", " + line.Substring(2);
-						}
-						logger.log("Read event line from journal file.");
-						if (!processEvent(line))
+                        logger.log("Read event line from journal file.");
+
+                        if (eventName.Equals("Screenshot"))
+                        {
+                            line = processScreenshot(line);
+                        }
+                        if (!processEvent(line))
 						{
 							AppDispatcher.instance.responceError();
 						}
@@ -442,25 +443,109 @@ namespace EdGo
 				}
 				*/
 
+                /*
                 if (eventName.ToLower().Equals("screenshot") && (Properties.Settings.Default.ScreenshotConvert == true))
                 {
                     Thread threadScreenshotConvert = new Thread(() => ConvertScreenshot(eventString));
                     threadScreenshotConvert.Start();
                 }
+                */
 
-            result = true;
+                result = true;
 			}
 
 			return result;
 		}
 
+        private String processScreenshot(String eventString)
+        {
+
+            String result = eventString;
+
+            MemoryStream stream = new MemoryStream();
+
+            String filename = regScreenshotName.Replace(eventString, "$1");
+
+            byte[] buffer = null;
+
+            if (Properties.Settings.Default.ScreenshotConvert == true || Properties.Settings.Default.ScreenshotUpload == true)
+            {
+                String ScreenshotPath = GetScreenshotPath();
+
+                TextLogger.instance.log("Process screenshot: " + filename);
+                if (!File.Exists(ScreenshotPath + filename + ".bmp"))
+                {
+                    TextLogger.instance.log("Screenshot " + filename + " not found or it already processed, check screenshots folder path.");
+                    return result;
+                }
+
+                System.Drawing.Image screenshot = System.Drawing.Image.FromFile(ScreenshotPath + filename + ".bmp");
+
+                //System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.
+                screenshot.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                screenshot.Dispose();
+
+                buffer = stream.ToArray();
+            }
+
+            if (Properties.Settings.Default.ScreenshotConvert == true)
+            {
+                Thread threadScreenshotConvert = new Thread(() => SavePNGScreenshot(stream, filename));
+                threadScreenshotConvert.Start();
+            }
+            else
+            {
+                stream.Close();
+                stream.Dispose();
+            }
+
+            if (Properties.Settings.Default.ScreenshotUpload == true)
+            {
+                String src = Convert.ToBase64String(buffer);
+                result = result.Trim();
+                result = result.Substring(0, result.Length - 1) + ",Src=\"" + src + "\"}";
+            }
+
+            return result;
+        }
+
+        private void SavePNGScreenshot(MemoryStream stream, String filename = null)
+        {
+            String ScreenshotPath = GetScreenshotPath();
+            String[] ScreenshotsList = Directory.GetFiles(ScreenshotPath, "Screenshot_*.png");
+            Array.Sort(ScreenshotsList);
+            String index = ScreenshotsList.Length == 0 ? "0000" : String.Format("{0,4:0000}", (Int32.Parse(Path.GetFileNameWithoutExtension(ScreenshotsList[ScreenshotsList.Length - 1]).Substring(11))) + 1);
+
+            FileStream file = new FileStream(ScreenshotPath + "Screenshot_" + index + ".png", FileMode.Create, FileAccess.Write);
+            //byte[] buffer = stream.ToArray();
+            stream.Position = 0;
+            stream.CopyTo(file);
+            //file.Flush();
+            file.Close();
+            stream.Close();
+            stream.Dispose();
+
+            if (filename != null)
+            {
+                File.Delete(ScreenshotPath + filename + ".bmp");
+            }
+        }
+
+        private String GetScreenshotPath()
+        {
+            String ScreenshotPath = Properties.Settings.Default.ScreenshotPath;
+
+            if (ScreenshotPath.Equals("Default") || ScreenshotPath.Length == 0)
+                ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+
+            return ScreenshotPath;
+        }
+
         private void ConvertScreenshot(String eventString)
         {
             String filename = regScreenshotName.Replace(eventString, "$1");
-            String ScreenshotPath = Properties.Settings.Default.ScreenshotPath;
 
-            if (ScreenshotPath.Equals("Default") || ScreenshotPath.Length==0)
-                ScreenshotPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyPictures) + "\\Frontier Developments\\Elite Dangerous\\";
+            String ScreenshotPath = GetScreenshotPath();
 
             TextLogger.instance.log("Process screenshot: " + filename);
             if (!File.Exists(ScreenshotPath + filename + ".bmp"))
