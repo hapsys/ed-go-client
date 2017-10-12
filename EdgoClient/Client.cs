@@ -289,14 +289,13 @@ namespace EdGo.EdgoClient
 					{
 						result = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
 					}
-
-				}
-			}
+                    desKey = coder.decode(secretKey);
+                }
+            }
 			catch (Exception e)
 			{
 			}
 
-            desKey = coder.decode(secretKey);
             desCoder = null;
 
             return result;
