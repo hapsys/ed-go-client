@@ -30,7 +30,8 @@ namespace EdGo.EdgoClient
 		public String url { get; set; } = null;
 		public String userId { get; set; } = null;
 
-		private String __userKey = "";
+        private String __userKeyOld = "";
+        private String __userKey = "";
 		public String userKey {
 			get
 			{
@@ -103,9 +104,10 @@ namespace EdGo.EdgoClient
 
         private void rsaInit()
         {
-            if (coder == null) {
+            if (coder == null || __userKeyOld != __userKey) {
                 RsaKeyParameters publicKey = (RsaKeyParameters)PublicKeyFactory.CreateKey(pgpKey);
                 coder = new RSAAlgorithm(publicKey);
+                __userKeyOld = __userKey;
             }
 
 		}
@@ -182,14 +184,21 @@ namespace EdGo.EdgoClient
             request.ContentLength = data.Length;
             request.Timeout = 3600000;
 
-            using (var stream = request.GetRequestStream())
+            try
             {
-                stream.Write(data, 0, data.Length);
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                result = new System.IO.StreamReader(response.GetResponseStream()).ReadToEnd();
+            } 
+            catch (Exception e)
+            {
+
             }
-
-            var response = (HttpWebResponse)request.GetResponse();
-
-            result = new System.IO.StreamReader(response.GetResponseStream()).ReadToEnd();
 
             return result;
         }
