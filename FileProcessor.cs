@@ -89,7 +89,8 @@ namespace EdGo
 				else
 				{
 					filelist = directoryList(true);
-					/*
+                    lastFile = null;
+                    /*
 					int idx = 0;
 					int count = filelist.Count;
 					if (lastFile != null && lastFile.Length > 0)
@@ -110,7 +111,7 @@ namespace EdGo
 						idx = filelist.Count() - 1;
 					}
 					*/
-					int idx = filelist.Count() - 1;
+                    int idx = filelist.Count() - 1;
 					logger.log("Start index: " + idx);
 					bool found = false;
 					for (int i = idx; i >= 0 && !found; i--)
