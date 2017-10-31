@@ -157,15 +157,15 @@ namespace EdGo
 												break;
 											}
 										}
-									} else if (timestamp.CompareTo(time) < 0)
+									} /* else if (timestamp.CompareTo(time) > 0)
                                     {
                                         found = true;
                                         result = filelist[i].name;
                                         lastFile = result;
-                                        lastLine = lineIdx + 1;
+                                        lastLine = lineIdx;
                                         logger.log("Found file less timestamp: " + result + "#Line:" + lineIdx);
                                         break;
-                                    }
+                                    } */
                                     lineIdx++;
 								}
 								reader.Close();
