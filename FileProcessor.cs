@@ -152,18 +152,31 @@ namespace EdGo
 												result = filelist[i].name;
 												lastFile = result;
 												lastLine = lineIdx + 1;
-												logger.log("Found file: " + result + "#Line:" + lineIdx);
+												logger.log("Found file match timestamp: " + result + "#Line:" + lineIdx);
 												break;
 											}
 										}
-									}
-									lineIdx++;
+									} else if (timestamp.CompareTo(time) < 0)
+                                    {
+                                        found = true;
+                                        result = filelist[i].name;
+                                        lastFile = result;
+                                        lastLine = lineIdx + 1;
+                                        logger.log("Found file less timestamp: " + result + "#Line:" + lineIdx);
+                                        break;
+                                    }
+                                    lineIdx++;
 								}
 								reader.Close();
 							}
 							fs.Close();
 						}
 					}
+                    if (((lastFile == null) || lastFile.Length == 0) && filelist.Count() > 0)
+                    {
+                        logger.log("No file found. Use first");
+                        lastFile = filelist[0].name;
+                    }
 					logger.log("Scan finish");
 					saveSettings();
 				}
