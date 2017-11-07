@@ -79,7 +79,10 @@ namespace EdGo
 
 				List<FileDescription> filelist = null;
 
-				if (time == null)
+                lastFile = null;
+                lastLine = 0;
+
+                if (time == null)
 				{
 					filelist = directoryList(true);
 					result = filelist[0].name;
@@ -89,34 +92,14 @@ namespace EdGo
 				else
 				{
 					filelist = directoryList(true);
-                    lastFile = null;
-                    /*
-					int idx = 0;
-					int count = filelist.Count;
-					if (lastFile != null && lastFile.Length > 0)
-					{
-						for (int i = count - 1; i >= 0; i--)
-						{
-							logger.log("Find in file \"" + filelist[i].name + "\"");
-							if (lastFile.Equals(filelist[i].name))
-							{
-								logger.log("Found \"" + filelist[i].name + "\"");
-								idx = i;
-								break;
-							}
-						}
-					}
-					else
-					{
-						idx = filelist.Count() - 1;
-					}
-					*/
+
+
                     int idx = filelist.Count() - 1;
 					logger.log("Start index: " + idx);
 					bool found = false;
 					for (int i = idx; i >= 0 && !found; i--)
 					{
-                        skipFile = false;
+                        //skipFile = false;
 						String fn = homeDir + filelist[i].name;
 						logger.log("Scan file: " + filelist[i].name);
 						int lineIdx = 0;
@@ -124,51 +107,54 @@ namespace EdGo
 						{
 							using (reader = new StreamReader(fs, System.Text.Encoding.UTF8))
 							{
-								String line = null;
-								while ((line = reader.ReadLine()) != null && !skipFile)
-								{
-									Thread.Sleep(1);
+								String line = reader.ReadLine();
+                                if (line != null && !skipFile) {
                                     String eventName = regEvent.Replace(line, "$1");
                                     if (eventName.Equals("Fileheader"))
                                     {
-                                        if (regBeta.IsMatch(line))
+                                        if (!regBeta.IsMatch(line))
                                         {
-                                            skipFile = true;
-                                            break;
-                                        } else
-                                        {
-                                            skipFile = false;
+                                            String timestamp = regTimestamp.Replace(line, "$1");
+                                            if (timestamp.CompareTo(time) <= 0)
+                                            {
+                                                found = true;
+                                                lineIdx = 1;
+                                                while ((line = reader.ReadLine()) != null)
+                                                {
+                                                    timestamp = regTimestamp.Replace(line, "$1");
+                                                    if (timestamp.Equals(time))
+                                                    {
+                                                        if (eventName.Equals(lastEvent))
+                                                        {
+                                                            String md5 = CreateMD5(line.Trim()).ToLower();
+                                                            logger.log(md5);
+                                                            if (md5.Equals(hash))
+                                                            {
+                                                                found = true;
+                                                                result = filelist[i].name;
+                                                                lastFile = result;
+                                                                lastLine = lineIdx + 1;
+                                                                logger.log("Found file match timestamp: " + result + "#Line:" + lineIdx);
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (timestamp.CompareTo(time) > 0)
+                                                    {
+                                                        found = true;
+                                                        result = filelist[i].name;
+                                                        lastFile = result;
+                                                        lastLine = lineIdx;
+                                                        logger.log("Found file less timestamp: " + result + "#Line:" + lineIdx);
+                                                        break;
+                                                    }
+                                                    lineIdx++;
+                                                }
+                                            }
                                         }
                                     }
-                                    String timestamp = regTimestamp.Replace(line, "$1");
-									if (timestamp.Equals(time))
-									{
-										if (eventName.Equals(lastEvent))
-										{
-											String md5 = CreateMD5(line.Trim()).ToLower();
-											logger.log(md5);
-											if (md5.Equals(hash))
-											{
-												found = true;
-												result = filelist[i].name;
-												lastFile = result;
-												lastLine = lineIdx + 1;
-												logger.log("Found file match timestamp: " + result + "#Line:" + lineIdx);
-												break;
-											}
-										}
-									} /* else if (timestamp.CompareTo(time) > 0)
-                                    {
-                                        found = true;
-                                        result = filelist[i].name;
-                                        lastFile = result;
-                                        lastLine = lineIdx;
-                                        logger.log("Found file less timestamp: " + result + "#Line:" + lineIdx);
-                                        break;
-                                    } */
-                                    lineIdx++;
-								}
-								reader.Close();
+                                }
+                                reader.Close();
 							}
 							fs.Close();
 						}
