@@ -93,6 +93,8 @@ namespace EdGo
 				{
 					filelist = directoryList(true);
 
+                    //logger.log("Last time: " + time);
+                    //logger.log("Last event: " + lastEvent);
 
                     int idx = filelist.Count() - 1;
 					logger.log("Start index: " + idx);
@@ -102,7 +104,7 @@ namespace EdGo
                         //skipFile = false;
 						String fn = homeDir + filelist[i].name;
 						logger.log("Scan file: " + filelist[i].name);
-						int lineIdx = 0;
+                        int lineIdx = 0;
 						using (fs = new FileStream(fn, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 						{
 							using (reader = new StreamReader(fs, System.Text.Encoding.UTF8))
@@ -115,6 +117,7 @@ namespace EdGo
                                         if (!regBeta.IsMatch(line))
                                         {
                                             String timestamp = regTimestamp.Replace(line, "$1");
+                                            //logger.log("First time: " + timestamp);
                                             if (timestamp.CompareTo(time) <= 0)
                                             {
                                                 found = true;
@@ -122,11 +125,17 @@ namespace EdGo
                                                 while ((line = reader.ReadLine()) != null)
                                                 {
                                                     timestamp = regTimestamp.Replace(line, "$1");
+                                                    //logger.log("Read time: " + timestamp);
                                                     if (timestamp.Equals(time))
                                                     {
+                                                        eventName = regEvent.Replace(line, "$1");
+                                                        //logger.log("Read event: " + eventName);
+                                                        //logger.log("Compare time: " + timestamp.Equals(time));
+                                                        //logger.log("Compare event: " + eventName.Equals(lastEvent));
                                                         if (eventName.Equals(lastEvent))
                                                         {
                                                             String md5 = CreateMD5(line.Trim()).ToLower();
+                                                            //logger.log("Compare hash: " + md5.Equals(hash));
                                                             logger.log(md5);
                                                             if (md5.Equals(hash))
                                                             {
@@ -185,7 +194,7 @@ namespace EdGo
 		private List<FileDescription> directoryList(bool asc = true)
 		{
 			List<FileDescription> result = new List<FileDescription>();
-			string[] filenames = Directory.GetFiles(homeDir, "*.log");
+			string[] filenames = Directory.GetFiles(homeDir, "Journal.*.log");
 			foreach (string filename in filenames)
 			{
 				result.Add(new FileDescription(reg.Replace(filename.Replace('\\', '/'), "$1"), File.GetCreationTime(filename).ToString()));
@@ -193,14 +202,17 @@ namespace EdGo
 
 			if (asc)
 			{
-				result.Sort(compareByCreateTimeAsc);
-			}
+                //result.Sort(compareByCreateTimeAsc);
+                result.Sort(compareByFileNameAsc);
+
+            }
 			else
 			{
-				result.Sort(compareByCreateTimeDesc);
-			}
+				//result.Sort(compareByCreateTimeDesc);
+                result.Sort(compareByFileNameDesc);
+            }
 
-			return result;
+            return result;
 		}
 
 
@@ -358,7 +370,16 @@ namespace EdGo
 			return -File.GetCreationTime(homeDir + a.name).CompareTo(File.GetCreationTime(homeDir + b.name));
 		}
 
-		public void processCurrentFile()
+        private static int compareByFileNameAsc(FileDescription a, FileDescription b)
+        {
+            return a.name.CompareTo(b.name);
+        }
+        private static int compareByFileNameDesc(FileDescription a, FileDescription b)
+        {
+            return b.name.CompareTo(a.name);
+        }
+
+        public void processCurrentFile()
         {
             try
             {
