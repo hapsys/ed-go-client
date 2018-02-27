@@ -17,7 +17,7 @@ namespace EdGo
             "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore",
             "ModuleSwap", "PowerplayCollect", "PowerplayDefect", "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave",
             "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy",
-            "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff", "Touchdown", "Screenshot"};
+            "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff", "Touchdown", "Screenshot", "Commander"};
 
 		IDictionary<String, byte> events = null;
 
@@ -30,10 +30,7 @@ namespace EdGo
         private Regex regBeta = new Regex("beta", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static string homeDir = Environment.ExpandEnvironmentVariables("%USERPROFILE%") + "\\Saved Games\\Frontier Developments\\Elite Dangerous\\";
-		//private static string homeDir = "F:\\freelance\\elite-dangerous\\journals\\oleg\\";
-		//private List<FileDescription> files = null;
 		private StreamReader reader = null;
-        //private CommandProcessor processor = null;
         TextLogger logger = TextLogger.instance;
 
 		private String lastFile = null;
