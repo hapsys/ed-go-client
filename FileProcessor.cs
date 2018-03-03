@@ -17,7 +17,8 @@ namespace EdGo
             "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore",
             "ModuleSwap", "PowerplayCollect", "PowerplayDefect", "PowerplayDeliver", "PowerplayFastTrack", "PowerplayJoin", "PowerplayLeave",
             "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy",
-            "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff", "Touchdown", "Screenshot", "Commander"};
+            "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff",
+            "Touchdown", "Screenshot", "Commander", "MaterialTrade"};
 
 		IDictionary<String, byte> events = null;
 
