@@ -12,6 +12,7 @@ namespace EdGo
     class FileProcessor
     {
 
+        /*
 		private String[] eventsArray = { "Bounty", "CompanionApi", "Docked", "EngineerCraft", "FSDJump", "FetchRemoteModule",
             "LoadGame", "Loadout", "Location", "MaterialCollected", "MaterialDiscarded", "MaterialDiscovered", "Materials", "MissionAbandoned",
             "MissionAccepted", "MissionCompleted", "MissionFailed", "ModuleBuy", "ModuleRetrieve", "ModuleSell", "ModuleStore",
@@ -19,8 +20,11 @@ namespace EdGo
             "PowerplaySalary", "PowerplayVote", "PowerplayVoucher", "Progress", "Rank", "RedeemVoucher", "SetUserShipName", "ShipyardBuy",
             "ShipyardNew", "ShipyardSell", "ShipyardSwap", "SupercruiseExit", "SupercruiseEntry", "Synthesis", "Undocked", "Liftoff",
             "Touchdown", "Screenshot", "Commander", "MaterialTrade"};
+        */
+        private String[] eventsArray = null;
 
-		IDictionary<String, byte> events = null;
+
+        IDictionary<String, byte> events = null;
 
 
 		private Regex reg = new Regex("^.*/([^/]+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -43,7 +47,14 @@ namespace EdGo
         {
         }
 
-		public void load()
+        public void setEventsArray(String value)
+        {
+            eventsArray = value.Split(',');
+            events = null;
+        }
+
+
+        public void load()
 		{
 			lastFile = Properties.Settings.Default.LastFile;
 			lastLine = Properties.Settings.Default.LastLine;

@@ -278,8 +278,9 @@ namespace EdGo.EdgoClient
                     secretKey = values["secretKey"].ToString();
 
                     String str = reg.Replace(stringContent, "$1");
-					//Console.WriteLine(str);
-					logger.log(str);
+                    String events = values["events"].ToString();
+                    //Console.WriteLine(str);
+                    logger.log(str);
 					if ("{}".Equals(str))
 					{
 						result = new Dictionary<string, string>();
@@ -288,7 +289,10 @@ namespace EdGo.EdgoClient
 					else
 					{
 						result = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
-					}
+
+                    }
+
+                    result["events"] = events;
                     desKey = coder.decode(secretKey);
                 }
             }

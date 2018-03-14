@@ -115,6 +115,9 @@ namespace EdGo
 					}
 					else
 					{
+
+                        fileProc.setEventsArray(startInfo["events"]);
+
 						if (startInfo.ContainsKey("timestamp"))
 						{
 							//setPilotNames(startInfo["used_names"]);
